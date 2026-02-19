@@ -489,7 +489,7 @@
             const user = document.getElementById('username')?.value;
             const pass = document.getElementById('password')?.value;
             
-            if (user === 'admin' && pass === 'admin123') {
+            if (user === 'cabrizo' && pass === 'visualstudio') {
                 sessionStorage.setItem('adminLoggedIn', 'true');
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('adminDashboard').style.display = 'block';
