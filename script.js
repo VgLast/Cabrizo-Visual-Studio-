@@ -22,76 +22,77 @@
         appId: "1:547993522948:web:5a7d72cad040db47617651"
     };
 
+
     // ============================================
-    // DADOS INICIAIS
-    // ============================================
-    const DADOS_INICIAIS = {
-        heroImages: [
-            "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=1200",
-            "https://images.unsplash.com/photo-1452587925148-ce544e77e70d?w=1200",
-            "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=1200"
-        ],
-        sobre: {
-            titulo: "Sobre Nós",
-            texto: "Somos o Cabrizo Visual Studio, uma agência de fotografia profissional dedicada a capturar momentos únicos e especiais. Com mais de 10 anos de experiência, nossa equipe de fotógrafos talentosos está pronta para transformar suas memórias em arte através da luz e da emoção."
+// DADOS INICIAIS (SUAS INFORMAÇÕES PESSOAIS ATUALIZADAS)
+// ============================================
+const DADOS_INICIAIS = {
+    heroImages: [
+        "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=1200",
+        "https://images.unsplash.com/photo-1452587925148-ce544e77e70d?w=1200",
+        "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=1200"
+    ],
+    sobre: {
+        titulo: "Sobre Nós",
+        texto: "Somos o Cabrizo Visual Studio, uma agência de fotografia profissional dedicada a capturar momentos únicos e especiais. Com mais de 10 anos de experiência, nossa equipe de fotógrafos talentosos está pronta para transformar suas memórias em arte através da luz e da emoção."
+    },
+    portfolio: [
+        {
+            id: "foto_001",
+            titulo: "Casamento na Praia",
+            categoria: "Casamento",
+            imagem: "https://images.unsplash.com/photo-1519741497674-611481863552?w=800",
+            descricao: "Momento especial capturado com emoção"
         },
-        portfolio: [
-            {
-                id: "foto_001",
-                titulo: "Casamento na Praia",
-                categoria: "Casamento",
-                imagem: "https://images.unsplash.com/photo-1519741497674-611481863552?w=800",
-                descricao: "Momento especial capturado com emoção"
-            },
-            {
-                id: "foto_002",
-                titulo: "Moda Urbana",
-                categoria: "Moda",
-                imagem: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800",
-                descricao: "Estilo e personalidade"
-            },
-            {
-                id: "foto_003",
-                titulo: "Evento Corporativo",
-                categoria: "Corporativo",
-                imagem: "https://images.unsplash.com/photo-1511578314322-379afb476865?w=800",
-                descricao: "Profissionalismo em cada detalhe"
-            }
-        ],
-        servicos: [
-            {
-                id: "serv_001",
-                titulo: "Ensaios Externos",
-                descricao: "Sessões fotográficas em locações externas com luz natural.",
-                icone: "fa-camera"
-            },
-            {
-                id: "serv_002",
-                titulo: "Estúdio Profissional",
-                descricao: "Estrutura completa com iluminação profissional.",
-                icone: "fa-lightbulb"
-            },
-            {
-                id: "serv_003",
-                titulo: "Eventos",
-                descricao: "Cobertura completa de casamentos e eventos.",
-                icone: "fa-calendar"
-            }
-        ],
-        contato: {
-            email: "acabrizo@gmail.com",
-            telefone: "863816035",
-            whatsapp: "863816035",
-            endereco: "Beira,Mozambique",
-            instagram: "angelo cabrizo",
-            facebook: "angelo cabrizo"
+        {
+            id: "foto_002",
+            titulo: "Moda Urbana",
+            categoria: "Moda",
+            imagem: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800",
+            descricao: "Estilo e personalidade"
         },
-        redesSociais: [
-            { nome: "Instagram", url: "https://instagram.com/angelo cabrizo", icone: "fa-instagram" },
-            { nome: "Facebook", url: "https://facebook.com/angelo cabrizo", icone: "fa-facebook" }
-        ],
-        mensagens: []
-    };
+        {
+            id: "foto_003",
+            titulo: "Evento Corporativo",
+            categoria: "Corporativo",
+            imagem: "https://images.unsplash.com/photo-1511578314322-379afb476865?w=800",
+            descricao: "Profissionalismo em cada detalhe"
+        }
+    ],
+    servicos: [
+        {
+            id: "serv_001",
+            titulo: "Ensaios Externos",
+            descricao: "Sessões fotográficas em locações externas com luz natural.",
+            icone: "fa-camera"
+        },
+        {
+            id: "serv_002",
+            titulo: "Estúdio Profissional",
+            descricao: "Estrutura completa com iluminação profissional.",
+            icone: "fa-lightbulb"
+        },
+        {
+            id: "serv_003",
+            titulo: "Eventos",
+            descricao: "Cobertura completa de casamentos e eventos.",
+            icone: "fa-calendar"
+        }
+    ],
+    contato: {
+        email: "acabrizo@gmail.com",
+        telefone: "863816035",
+        whatsapp: "863816035",
+        endereco: "Beira, Mozambique",
+        instagram: "angelo cabrizo",
+        facebook: "angelo cabrizo"
+    },
+    redesSociais: [
+        { nome: "Instagram", url: "https://instagram.com/angelocabrizo", icone: "fa-instagram" },
+        { nome: "Facebook", url: "https://facebook.com/angelocabrizo", icone: "fa-facebook" }
+    ],
+    mensagens: []
+};
         
     // ============================================
     // VARIÁVEIS GLOBAIS
@@ -285,18 +286,22 @@
     }
 
     function renderContato() {
-        const info = document.getElementById('contatoInfo');
-        if (!info) return;
-        
-        info.innerHTML = `
-            <h3>Informações de Contato</h3>
-            <p><i class="fas fa-envelope"></i> ${siteData.contato.email}</p>
-            <p><i class="fas fa-phone"></i> ${siteData.contato.telefone}</p>
-            <p><i class="fab fa-whatsapp"></i> <a href="https://wa.me/${siteData.contato.whatsapp}" target="_blank">WhatsApp</a></p>
-            <p><i class="fas fa-map-marker-alt"></i> ${siteData.contato.endereco}</p>
-            <p><i class="fab fa-instagram"></i> <a href="https://instagram.com/${siteData.contato.instagram.replace('@', '')}" target="_blank">${siteData.contato.instagram}</a></p>
-            <p><i class="fab fa-facebook"></i> <a href="https://facebook.com${siteData.contato.facebook}" target="_blank">${siteData.contato.facebook}</a></p>
-        `;
+    const info = document.getElementById('contatoInfo');
+    if (!info) return;
+    
+    // Formatar Instagram (remover espaços para URL)
+    const instagramUser = siteData.contato.instagram.replace(/\s+/g, '');
+    const facebookUser = siteData.contato.facebook.replace(/\s+/g, '');
+    
+    info.innerHTML = `
+        <h3>Informações de Contato</h3>
+        <p><i class="fas fa-envelope"></i> ${siteData.contato.email}</p>
+        <p><i class="fas fa-phone"></i> ${siteData.contato.telefone}</p>
+        <p><i class="fab fa-whatsapp"></i> <a href="https://wa.me/${siteData.contato.whatsapp}" target="_blank">WhatsApp: ${siteData.contato.whatsapp}</a></p>
+        <p><i class="fas fa-map-marker-alt"></i> ${siteData.contato.endereco}</p>
+        <p><i class="fab fa-instagram"></i> <a href="https://instagram.com/${instagramUser}" target="_blank">${siteData.contato.instagram}</a></p>
+        <p><i class="fab fa-facebook"></i> <a href="https://facebook.com/${facebookUser}" target="_blank">${siteData.contato.facebook}</a></p>
+    `;
     }
 
     function renderRedesSociais() {
