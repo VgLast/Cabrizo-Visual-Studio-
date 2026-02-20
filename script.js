@@ -341,7 +341,7 @@
         `;
     }
     
-    
+
     function renderRedesSociais() {
         const links = document.getElementById('socialLinks');
         if (!links) return;
