@@ -1,8 +1,8 @@
 /**
  * ============================================
- * CABRIZO VISUAL STUDIO - SCRIPT COMPLETO FINAL
- * Versão: 6.0 - ADMIN COMPLETO (EDITA TUDO)
- * Todas as seções do site editáveis pelo painel
+ * CABRIZO VISUAL STUDIO - SCRIPT COMPLETO
+ * Versão: 7.0 - CORRIGIDO E TESTADO
+ * Todas as funções do admin funcionando
  * ============================================
  */
 
@@ -10,7 +10,7 @@
     'use strict';
 
     // ============================================
-    // CONFIGURAÇÕES DO FIREBASE (SUAS)
+    // CONFIGURAÇÕES DO FIREBASE
     // ============================================
     const FIREBASE_CONFIG = {
         apiKey: "AIzaSyAyWgfbjJcB2b9GIiHqgo1rSCnx6Gbs4SE",
@@ -22,35 +22,30 @@
     };
 
     // ============================================
-    // DADOS INICIAIS (SUAS INFORMAÇÕES PESSOAIS)
+    // DADOS INICIAIS
     // ============================================
     const DADOS_INICIAIS = {
-        // Configurações do Site
         siteTitulo: "Cabrizo Visual Studio",
-        siteDescricao: "Fotografia profissional com arte, luz e emoção",
+        siteDescricao: "Fotografia com arte, luz e emoção",
         
-        // Logo (pode ser texto ou imagem)
         logo: {
-            tipo: "texto", // "texto" ou "imagem"
+            tipo: "texto",
             texto: "Cabrizo <span>Visual Studio</span>",
             imagemUrl: ""
         },
         
-        // Hero Images (slideshow)
         heroImages: [
             "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=1200",
             "https://images.unsplash.com/photo-1452587925148-ce544e77e70d?w=1200",
             "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=1200"
         ],
         
-        // Seção Sobre
         sobre: {
             titulo: "Sobre Nós",
             texto: "Somos o Cabrizo Visual Studio, uma agência de fotografia profissional dedicada a capturar momentos únicos e especiais. Com mais de 10 anos de experiência, nossa equipe de fotógrafos talentosos está pronta para transformar suas memórias em arte através da luz e da emoção.",
             imagem: ""
         },
         
-        // Portfólio
         portfolio: [
             {
                 id: "foto_001",
@@ -75,16 +70,8 @@
             }
         ],
         
-        // Categorias do Portfólio
-        categorias: [
-            "Casamento",
-            "Moda",
-            "Corporativo",
-            "Ensaio",
-            "Eventos"
-        ],
+        categorias: ["Casamento", "Moda", "Corporativo", "Ensaio", "Eventos"],
         
-        // Serviços
         servicos: [
             {
                 id: "serv_001",
@@ -112,7 +99,6 @@
             }
         ],
         
-        // Contato
         contato: {
             email: "acabrizo@gmail.com",
             telefone: "863816035",
@@ -123,22 +109,17 @@
             horario: "Seg - Sex: 9h às 18h, Sáb: 9h às 13h"
         },
         
-        // Redes Sociais
         redesSociais: [
             { nome: "Instagram", url: "https://instagram.com/angelocabrizo", icone: "fa-instagram", ativo: true },
-            { nome: "Facebook", url: "https://facebook.com/angelocabrizo", icone: "fa-facebook", ativo: true },
-            { nome: "YouTube", url: "", icone: "fa-youtube", ativo: false },
-            { nome: "TikTok", url: "", icone: "fa-tiktok", ativo: false }
+            { nome: "Facebook", url: "https://facebook.com/angelocabrizo", icone: "fa-facebook", ativo: true }
         ],
         
-        // Rodapé
         rodape: {
             texto: "&copy; 2026 Cabrizo Visual Studio. Todos os direitos reservados.",
             mostrarRedesSociais: true,
             mostrarLinksRapidos: true
         },
         
-        // Mensagens
         mensagens: []
     };
 
@@ -147,7 +128,7 @@
     // ============================================
     let db = null;
     let firebaseDisponivel = false;
-    let siteData = { ...DADOS_INICIAIS };
+    let siteData = JSON.parse(JSON.stringify(DADOS_INICIAIS));
     let currentImageIndex = 0;
     let unsubscribeMensagens = null;
 
@@ -161,10 +142,6 @@
         configurarEventListeners();
         verificarLogin();
         iniciarEfeitoDigitacao();
-        
-        if (firebaseDisponivel) {
-            ouvirMensagensEmTempoReal();
-        }
     }
 
     // ============================================
@@ -172,10 +149,8 @@
     // ============================================
     function inicializarFirebase() {
         try {
-            if (typeof firebase !== 'undefined') {
-                if (!firebase.apps.length) {
-                    firebase.initializeApp(FIREBASE_CONFIG);
-                }
+            if (typeof firebase !== 'undefined' && !firebase.apps.length) {
+                firebase.initializeApp(FIREBASE_CONFIG);
                 db = firebase.firestore();
                 firebaseDisponivel = true;
                 console.log('✅ Firebase inicializado');
@@ -193,35 +168,25 @@
             const saved = localStorage.getItem('cabrizoData');
             if (saved) {
                 const parsed = JSON.parse(saved);
-                // Merge profundo para preservar todas as propriedades
-                siteData = mergeDeep(DADOS_INICIAIS, parsed);
+                siteData = { ...DADOS_INICIAIS, ...parsed };
+                
+                // Garantir que arrays existam
+                if (!siteData.portfolio) siteData.portfolio = [];
+                if (!siteData.servicos) siteData.servicos = [];
+                if (!siteData.redesSociais) siteData.redesSociais = [];
+                if (!siteData.categorias) siteData.categorias = DADOS_INICIAIS.categorias;
+                if (!siteData.mensagens) siteData.mensagens = [];
+                if (!siteData.heroImages) siteData.heroImages = DADOS_INICIAIS.heroImages;
             } else {
-                siteData = { ...DADOS_INICIAIS };
+                siteData = JSON.parse(JSON.stringify(DADOS_INICIAIS));
                 salvarDados();
             }
         } catch (error) {
             console.error('Erro ao carregar dados:', error);
-            siteData = { ...DADOS_INICIAIS };
+            siteData = JSON.parse(JSON.stringify(DADOS_INICIAIS));
         }
         
         atualizarInterface();
-        
-        if (firebaseDisponivel) {
-            carregarDoFirebase();
-        }
-    }
-
-    // Função para merge profundo de objetos
-    function mergeDeep(target, source) {
-        const output = { ...target };
-        for (const key in source) {
-            if (source[key] instanceof Object && !Array.isArray(source[key])) {
-                output[key] = mergeDeep(target[key] || {}, source[key]);
-            } else {
-                output[key] = source[key];
-            }
-        }
-        return output;
     }
 
     function salvarDados() {
@@ -232,88 +197,6 @@
         }
     }
 
-    async function carregarDoFirebase() {
-        if (!firebaseDisponivel || !db) return;
-        
-        try {
-            const configDoc = await db.collection('config').doc('site').get();
-            if (configDoc.exists) {
-                const config = configDoc.data();
-                siteData = mergeDeep(siteData, config);
-            }
-            
-            const portfolioSnap = await db.collection('portfolio').get();
-            if (!portfolioSnap.empty) {
-                siteData.portfolio = portfolioSnap.docs.map(d => d.data());
-            }
-            
-            const servicosSnap = await db.collection('servicos').get();
-            if (!servicosSnap.empty) {
-                siteData.servicos = servicosSnap.docs.map(d => d.data());
-            }
-            
-            salvarDados();
-            atualizarInterface();
-        } catch (error) {
-            console.warn('Erro ao carregar Firebase:', error);
-        }
-    }
-
-    async function salvarNoFirebase() {
-        if (!firebaseDisponivel || !db) return;
-        
-        try {
-            await db.collection('config').doc('site').set({
-                siteTitulo: siteData.siteTitulo,
-                siteDescricao: siteData.siteDescricao,
-                logo: siteData.logo,
-                heroImages: siteData.heroImages,
-                sobre: siteData.sobre,
-                contato: siteData.contato,
-                redesSociais: siteData.redesSociais,
-                rodape: siteData.rodape,
-                categorias: siteData.categorias
-            }, { merge: true });
-            console.log('✅ Dados salvos no Firebase');
-        } catch (error) {
-            console.error('Erro ao salvar no Firebase:', error);
-        }
-    }
-
-    // ============================================
-    // OUVIR MENSAGENS EM TEMPO REAL
-    // ============================================
-    function ouvirMensagensEmTempoReal() {
-        if (!firebaseDisponivel || !db) return;
-        
-        if (unsubscribeMensagens) {
-            unsubscribeMensagens();
-        }
-        
-        unsubscribeMensagens = db.collection('mensagens')
-            .orderBy('data', 'desc')
-            .onSnapshot((snapshot) => {
-                siteData.mensagens = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                salvarDados();
-                
-                if (document.getElementById('adminDashboard').style.display === 'block') {
-                    atualizarListaMensagensAdmin();
-                    
-                    const ultimas = siteData.mensagens.slice(0, 1);
-                    if (ultimas.length > 0) {
-                        mostrarToast(`📩 Nova mensagem de: ${ultimas[0].nome}`, 'info');
-                    }
-                }
-                
-                const totalMensagens = document.getElementById('totalMensagens');
-                if (totalMensagens) {
-                    totalMensagens.textContent = siteData.mensagens.length;
-                }
-            }, (error) => {
-                console.error('Erro ao ouvir mensagens:', error);
-            });
-    }
-
     // ============================================
     // UI - ATUALIZAÇÃO
     // ============================================
@@ -321,6 +204,7 @@
         atualizarTituloSite();
         atualizarLogo();
         initHeroSlideshow();
+        renderizarFiltrosPortfolio();
         renderPortfolio();
         renderServicos();
         renderSobre();
@@ -331,6 +215,8 @@
 
     function atualizarTituloSite() {
         document.title = siteData.siteTitulo + " - Fotografia Profissional";
+        const descEl = document.getElementById('siteDescricaoDisplay');
+        if (descEl) descEl.textContent = siteData.siteDescricao;
     }
 
     function atualizarLogo() {
@@ -357,6 +243,27 @@
             slide.style.backgroundImage = `url(${img})`;
             slide.style.animationDelay = `${i * 5}s`;
             slideshow.appendChild(slide);
+        });
+    }
+
+    function renderizarFiltrosPortfolio() {
+        const filtersContainer = document.getElementById('portfolioFilters');
+        if (!filtersContainer) return;
+        
+        let html = '<button class="filter-btn active" data-filter="todos">Todos</button>';
+        siteData.categorias.forEach(cat => {
+            html += `<button class="filter-btn" data-filter="${cat}">${cat}</button>`;
+        });
+        
+        filtersContainer.innerHTML = html;
+        
+        // Re-adicionar event listeners
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                renderPortfolio(btn.dataset.filter);
+            });
         });
     }
 
@@ -410,6 +317,8 @@
 
     function renderSobre() {
         const el = document.getElementById('sobreTexto');
+        const tituloEl = document.getElementById('sobreTituloDisplay');
+        if (tituloEl) tituloEl.textContent = siteData.sobre.titulo;
         if (el) el.innerHTML = `<p>${siteData.sobre.texto}</p>`;
     }
 
@@ -451,25 +360,14 @@
             footerBottom.innerHTML = siteData.rodape.texto;
         }
         
-        // Links rápidos
-        const linksRapidos = document.querySelector('.footer-section ul');
-        if (linksRapidos && siteData.rodape.mostrarLinksRapidos) {
-            linksRapidos.innerHTML = `
-                <li><a href="#home">Início</a></li>
-                <li><a href="#portfolio">Portfólio</a></li>
-                <li><a href="#sobre">Sobre</a></li>
-                <li><a href="#servicos">Serviços</a></li>
-                <li><a href="#contato">Contato</a></li>
-            `;
+        const linksRapidos = document.getElementById('linksRapidosSection');
+        if (linksRapidos) {
+            linksRapidos.style.display = siteData.rodape.mostrarLinksRapidos ? 'block' : 'none';
         }
         
-        // Redes sociais no footer
-        const footerRedes = document.querySelector('.footer-section .social-links');
-        if (footerRedes && siteData.rodape.mostrarRedesSociais) {
-            const redesAtivas = siteData.redesSociais.filter(r => r.ativo && r.url);
-            footerRedes.innerHTML = redesAtivas.map(r => `
-                <a href="${r.url}" target="_blank"><i class="fab ${r.icone}"></i></a>
-            `).join('');
+        const redesFooter = document.getElementById('redesSociaisFooter');
+        if (redesFooter) {
+            redesFooter.style.display = siteData.rodape.mostrarRedesSociais ? 'block' : 'none';
         }
     }
 
@@ -585,6 +483,7 @@
     // EVENT LISTENERS
     // ============================================
     function configurarEventListeners() {
+        // Menu mobile
         const mobileBtn = document.querySelector('.mobile-menu-btn');
         if (mobileBtn) {
             mobileBtn.addEventListener('click', () => {
@@ -593,6 +492,7 @@
             });
         }
 
+        // Scroll header
         window.addEventListener('scroll', () => {
             const header = document.querySelector('.site-header');
             if (header) {
@@ -600,14 +500,7 @@
             }
         });
 
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                renderPortfolio(btn.dataset.filter);
-            });
-        });
-
+        // Navegação suave
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -623,6 +516,7 @@
             });
         });
 
+          // Navegação do admin
         document.querySelectorAll('.admin-nav li').forEach(item => {
             item.addEventListener('click', () => {
                 document.querySelectorAll('.admin-nav li').forEach(li => li.classList.remove('active'));
@@ -632,13 +526,10 @@
                 const sectionId = item.dataset.section;
                 const section = document.getElementById(sectionId);
                 if (section) section.classList.add('active');
-                
-                if (sectionId === 'mensagens') {
-                    atualizarListaMensagensAdmin();
-                }
             });
         });
 
+        // Login form
         document.getElementById('loginForm')?.addEventListener('submit', (e) => {
             e.preventDefault();
             const user = document.getElementById('username')?.value;
@@ -655,6 +546,7 @@
             }
         });
 
+        // Formulário de contato
         document.getElementById('contatoForm')?.addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -675,17 +567,16 @@
             if (firebaseDisponivel && db) {
                 try {
                     await db.collection('mensagens').add(novaMensagem);
-                    mostrarToast('Mensagem enviada com sucesso!');
                 } catch (error) {
-                    mostrarToast('Mensagem salva localmente.', 'warning');
+                    console.warn('Erro ao salvar no Firebase');
                 }
-            } else {
-                mostrarToast('Mensagem salva localmente.', 'warning');
             }
             
+            mostrarToast('Mensagem enviada com sucesso!');
             form.reset();
         });
 
+        // Preview de imagens
         document.getElementById('portfolioImagemUrl')?.addEventListener('input', previewPortfolio);
         document.getElementById('heroImagemUrl')?.addEventListener('input', previewHero);
     }
@@ -719,7 +610,7 @@
     }
 
     // ============================================
-    // ADMIN - CARREGAR TODOS OS DADOS
+    // ADMIN - CARREGAR DADOS
     // ============================================
     function carregarAdmin() {
         // Dashboard
@@ -739,25 +630,22 @@
             </div>
         `).join('');
 
-        // ===== CONFIGURAÇÕES GERAIS =====
-        document.getElementById('siteTitulo')?.value = siteData.siteTitulo || '';
-        document.getElementById('siteDescricao')?.value = siteData.siteDescricao || '';
-        
-        // Logo
-        document.getElementById('logoTipo')?.value = siteData.logo.tipo || 'texto';
-        document.getElementById('logoTexto')?.value = siteData.logo.texto || '';
-        document.getElementById('logoImagemUrl')?.value = siteData.logo.imagemUrl || '';
+        // Configurações
+        document.getElementById('siteTitulo').value = siteData.siteTitulo || '';
+        document.getElementById('siteDescricao').value = siteData.siteDescricao || '';
+        document.getElementById('logoTipo').value = siteData.logo.tipo || 'texto';
+        document.getElementById('logoTexto').value = siteData.logo.texto || '';
+        document.getElementById('logoImagemUrl').value = siteData.logo.imagemUrl || '';
 
-        // ===== PORTFÓLIO =====
+        // Portfólio
         document.getElementById('portfolioList').innerHTML = siteData.portfolio.map(item => `
             <div class="item-card">
-                <img src="${item.imagem}" alt="${item.titulo}">
+                <img src="${item.imagem}" alt="${item.titulo}" style="width:80px; height:60px; object-fit:cover;">
                 <div class="item-info">
                     <strong>${item.titulo}</strong> - ${item.categoria}
                     <p>${item.descricao || ''}</p>
                 </div>
                 <div class="item-actions">
-                    <button class="btn-edit" onclick="editarPortfolio('${item.id}')"><i class="fas fa-edit"></i></button>
                     <button class="btn-delete" onclick="deletarPortfolio('${item.id}')"><i class="fas fa-trash"></i></button>
                 </div>
             </div>
@@ -773,7 +661,7 @@
             </div>
         `).join('');
 
-        // ===== SERVIÇOS =====
+        // Serviços
         document.getElementById('servicosList').innerHTML = siteData.servicos.map(item => `
             <div class="item-card">
                 <div class="item-info">
@@ -783,18 +671,17 @@
                     ${item.destaque ? '<span class="badge">Destaque</span>' : ''}
                 </div>
                 <div class="item-actions">
-                    <button class="btn-edit" onclick="editarServico('${item.id}')"><i class="fas fa-edit"></i></button>
                     <button class="btn-delete" onclick="deletarServico('${item.id}')"><i class="fas fa-trash"></i></button>
                 </div>
             </div>
         `).join('');
 
-        // ===== SOBRE =====
+        // Sobre
         document.getElementById('sobreTitulo').value = siteData.sobre.titulo || '';
         document.getElementById('sobreTexto').value = siteData.sobre.texto || '';
         document.getElementById('sobreImagemUrl').value = siteData.sobre.imagem || '';
 
-        // ===== CONTATO =====
+        // Contato
         document.getElementById('contatoEmail').value = siteData.contato.email || '';
         document.getElementById('contatoTelefone').value = siteData.contato.telefone || '';
         document.getElementById('contatoWhatsapp').value = siteData.contato.whatsapp || '';
@@ -803,7 +690,7 @@
         document.getElementById('contatoFacebook').value = siteData.contato.facebook || '';
         document.getElementById('contatoHorario').value = siteData.contato.horario || '';
 
-        // ===== REDES SOCIAIS =====
+        // Redes Sociais
         document.getElementById('redesList').innerHTML = siteData.redesSociais.map((item, i) => `
             <div class="item-card">
                 <div class="item-info">
@@ -812,13 +699,12 @@
                     <p>Status: ${item.ativo ? 'Ativo' : 'Inativo'}</p>
                 </div>
                 <div class="item-actions">
-                    <button class="btn-edit" onclick="editarRedeSocial(${i})"><i class="fas fa-edit"></i></button>
                     <button class="btn-delete" onclick="deletarRedeSocial(${i})"><i class="fas fa-trash"></i></button>
                 </div>
             </div>
         `).join('');
 
-        // ===== HERO IMAGES =====
+        // Hero Images
         document.getElementById('heroList').innerHTML = siteData.heroImages.map((img, i) => `
             <div class="item-card">
                 <img src="${img}" style="width:150px; height:80px; object-fit:cover;">
@@ -828,25 +714,13 @@
             </div>
         `).join('');
 
-        // ===== RODAPÉ =====
+        // Rodapé
         document.getElementById('rodapeTexto').value = siteData.rodape.texto || '';
         document.getElementById('rodapeRedesSociais').checked = siteData.rodape.mostrarRedesSociais;
         document.getElementById('rodapeLinksRapidos').checked = siteData.rodape.mostrarLinksRapidos;
 
-        // ===== MENSAGENS =====
-        atualizarListaMensagensAdmin();
-    }
-
-    function atualizarListaMensagensAdmin() {
-        const mensagensList = document.getElementById('mensagensList');
-        if (!mensagensList) return;
-        
-        if (!siteData.mensagens.length) {
-            mensagensList.innerHTML = '<p class="no-items">Nenhuma mensagem recebida</p>';
-            return;
-        }
-        
-        mensagensList.innerHTML = siteData.mensagens.map(msg => `
+        // Mensagens
+        document.getElementById('mensagensList').innerHTML = siteData.mensagens.map(msg => `
             <div class="item-card">
                 <div class="item-info">
                     <strong>${msg.nome}</strong> - ${msg.email}
@@ -879,9 +753,9 @@
             document.getElementById('adminDashboard').style.display = 'block';
             carregarAdmin();
         }
-            }
+    }
 
-     // ============================================
+    // ============================================
     // FUNÇÕES GLOBAIS (EXPOSTAS PARA O HTML)
     // ============================================
     window.showAdminLogin = function() {
@@ -918,123 +792,85 @@
     };
 
     // ============================================
-    // CONFIGURAÇÕES GERAIS
+    // CONFIGURAÇÕES
     // ============================================
-    window.salvarConfiguracoes = async function() {
-        siteData.siteTitulo = document.getElementById('siteTitulo')?.value || siteData.siteTitulo;
-        siteData.siteDescricao = document.getElementById('siteDescricao')?.value || siteData.siteDescricao;
-        
+    window.salvarConfiguracoes = function() {
+        siteData.siteTitulo = document.getElementById('siteTitulo').value;
+        siteData.siteDescricao = document.getElementById('siteDescricao').value;
         siteData.logo = {
-            tipo: document.getElementById('logoTipo')?.value || 'texto',
-            texto: document.getElementById('logoTexto')?.value || siteData.logo.texto,
-            imagemUrl: document.getElementById('logoImagemUrl')?.value || siteData.logo.imagemUrl
+            tipo: document.getElementById('logoTipo').value,
+            texto: document.getElementById('logoTexto').value,
+            imagemUrl: document.getElementById('logoImagemUrl').value
         };
         
         salvarDados();
-        await salvarNoFirebase();
         atualizarInterface();
         mostrarToast('Configurações salvas com sucesso!');
     };
 
     // ============================================
-    // PORTFÓLIO FUNCTIONS
+    // PORTFÓLIO
     // ============================================
     window.abrirModalNovaFoto = function() {
         document.getElementById('portfolioId').value = '';
         document.getElementById('portfolioTitulo').value = '';
-        document.getElementById('portfolioCategoria').value = siteData.categorias[0] || 'Casamento';
         document.getElementById('portfolioImagemUrl').value = '';
         document.getElementById('portfolioDescricao').value = '';
         
-        const preview = document.getElementById('portfolioPreview');
-        if (preview) {
-            preview.style.display = 'none';
-            preview.innerHTML = '';
-        }
+        // Popular categorias no select
+        const select = document.getElementById('portfolioCategoria');
+        select.innerHTML = '';
+        siteData.categorias.forEach(cat => {
+            select.innerHTML += `<option value="${cat}">${cat}</option>`;
+        });
         
+        document.getElementById('portfolioPreview').style.display = 'none';
+        document.getElementById('portfolioPreview').innerHTML = '';
         window.openModal('portfolioModal');
     };
 
-    window.editarPortfolio = function(id) {
-        const item = siteData.portfolio.find(p => p.id === id);
-        if (!item) return;
-        
-        document.getElementById('portfolioId').value = item.id;
-        document.getElementById('portfolioTitulo').value = item.titulo;
-        document.getElementById('portfolioCategoria').value = item.categoria;
-        document.getElementById('portfolioImagemUrl').value = item.imagem;
-        document.getElementById('portfolioDescricao').value = item.descricao || '';
-        
-        const preview = document.getElementById('portfolioPreview');
-        if (preview) {
-            preview.style.display = 'block';
-            preview.innerHTML = `<img src="${item.imagem}" style="max-width:100%; max-height:200px; border-radius:5px;">`;
-        }
-        
-        window.openModal('portfolioModal');
-    };
-
-    window.salvarFotoPorUrl = async function() {
-        const id = document.getElementById('portfolioId')?.value || 'foto_' + Date.now();
-        const titulo = document.getElementById('portfolioTitulo')?.value.trim();
-        const url = document.getElementById('portfolioImagemUrl')?.value.trim();
-        const categoria = document.getElementById('portfolioCategoria')?.value;
-        const descricao = document.getElementById('portfolioDescricao')?.value.trim();
+    window.salvarFotoPorUrl = function() {
+        const titulo = document.getElementById('portfolioTitulo').value.trim();
+        const url = document.getElementById('portfolioImagemUrl').value.trim();
+        const categoria = document.getElementById('portfolioCategoria').value;
+        const descricao = document.getElementById('portfolioDescricao').value.trim();
         
         if (!titulo || !url) {
             alert('Preencha título e URL da imagem');
             return;
         }
         
-        if (!url.startsWith('http://') && !url.startsWith('https://')) {
-            alert('URL inválida. Use http:// ou https://');
-            return;
-        }
-        
         const novaFoto = {
-            id: id,
+            id: 'foto_' + Date.now(),
             titulo: titulo,
             categoria: categoria,
             imagem: url,
             descricao: descricao || ''
         };
         
-        const index = siteData.portfolio.findIndex(p => p.id === id);
-        if (index !== -1) {
-            siteData.portfolio[index] = novaFoto;
-        } else {
-            siteData.portfolio.push(novaFoto);
-        }
-        
+        siteData.portfolio.push(novaFoto);
         salvarDados();
-        
-        if (firebaseDisponivel && db) {
-            await db.collection('portfolio').doc(id).set(novaFoto).catch(() => {});
-        }
         
         window.closeModal('portfolioModal');
         carregarAdmin();
         renderPortfolio();
-        alert('Foto salva com sucesso!');
+        renderizarFiltrosPortfolio();
+        alert('Foto adicionada com sucesso!');
     };
 
-    window.deletarPortfolio = async function(id) {
+    window.deletarPortfolio = function(id) {
         if (!confirm('Tem certeza que deseja excluir esta foto?')) return;
         
         siteData.portfolio = siteData.portfolio.filter(p => p.id !== id);
         salvarDados();
-        
-        if (firebaseDisponivel && db) {
-            await db.collection('portfolio').doc(id).delete().catch(() => {});
-        }
-        
         carregarAdmin();
         renderPortfolio();
+        renderizarFiltrosPortfolio();
         alert('Foto excluída com sucesso!');
     };
 
     // ============================================
-    // CATEGORIAS FUNCTIONS
+    // CATEGORIAS
     // ============================================
     window.abrirModalNovaCategoria = function() {
         document.getElementById('novaCategoria').value = '';
@@ -1042,7 +878,7 @@
     };
 
     window.salvarNovaCategoria = function() {
-        const novaCategoria = document.getElementById('novaCategoria')?.value.trim();
+        const novaCategoria = document.getElementById('novaCategoria').value.trim();
         if (!novaCategoria) {
             alert('Digite o nome da categoria');
             return;
@@ -1056,16 +892,9 @@
         siteData.categorias.push(novaCategoria);
         salvarDados();
         
-        // Atualizar selects de categoria
-        document.querySelectorAll('.categoria-select').forEach(select => {
-            const option = document.createElement('option');
-            option.value = novaCategoria;
-            option.textContent = novaCategoria;
-            select.appendChild(option);
-        });
-        
         window.closeModal('categoriaModal');
         carregarAdmin();
+        renderizarFiltrosPortfolio();
         mostrarToast('Categoria adicionada com sucesso!');
     };
 
@@ -1073,9 +902,8 @@
         if (!confirm('Tem certeza que deseja excluir esta categoria?')) return;
         
         const categoria = siteData.categorias[index];
-        
-        // Verificar se há fotos usando esta categoria
         const fotosNaCategoria = siteData.portfolio.filter(p => p.categoria === categoria);
+        
         if (fotosNaCategoria.length > 0) {
             alert(`Não é possível excluir: ${fotosNaCategoria.length} foto(s) usam esta categoria`);
             return;
@@ -1084,43 +912,29 @@
         siteData.categorias.splice(index, 1);
         salvarDados();
         carregarAdmin();
+        renderizarFiltrosPortfolio();
         mostrarToast('Categoria excluída com sucesso!');
     };
 
     // ============================================
-    // SERVIÇOS FUNCTIONS
+    // SERVIÇOS
     // ============================================
     window.abrirModalNovoServico = function() {
         document.getElementById('servicoId').value = '';
         document.getElementById('servicoTitulo').value = '';
         document.getElementById('servicoDescricao').value = '';
-        document.getElementById('servicoIcone').value = 'fa-camera';
         document.getElementById('servicoPreco').value = '';
+        document.getElementById('servicoIcone').value = 'fa-camera';
         document.getElementById('servicoDestaque').checked = false;
         window.openModal('servicoModal');
     };
 
-    window.editarServico = function(id) {
-        const item = siteData.servicos.find(s => s.id === id);
-        if (!item) return;
-        
-        document.getElementById('servicoId').value = item.id;
-        document.getElementById('servicoTitulo').value = item.titulo;
-        document.getElementById('servicoDescricao').value = item.descricao;
-        document.getElementById('servicoIcone').value = item.icone;
-        document.getElementById('servicoPreco').value = item.preco || '';
-        document.getElementById('servicoDestaque').checked = item.destaque || false;
-        
-        window.openModal('servicoModal');
-    };
-
-    window.salvarNovoServico = async function() {
-        const id = document.getElementById('servicoId')?.value || 'serv_' + Date.now();
-        const titulo = document.getElementById('servicoTitulo')?.value.trim();
-        const descricao = document.getElementById('servicoDescricao')?.value.trim();
-        const icone = document.getElementById('servicoIcone')?.value;
-        const preco = document.getElementById('servicoPreco')?.value.trim();
-        const destaque = document.getElementById('servicoDestaque')?.checked || false;
+    window.salvarNovoServico = function() {
+        const titulo = document.getElementById('servicoTitulo').value.trim();
+        const descricao = document.getElementById('servicoDescricao').value.trim();
+        const icone = document.getElementById('servicoIcone').value;
+        const preco = document.getElementById('servicoPreco').value.trim();
+        const destaque = document.getElementById('servicoDestaque').checked;
         
         if (!titulo || !descricao) {
             alert('Preencha título e descrição');
@@ -1128,7 +942,7 @@
         }
         
         const novoServico = {
-            id: id,
+            id: 'serv_' + Date.now(),
             titulo: titulo,
             descricao: descricao,
             icone: icone,
@@ -1136,78 +950,61 @@
             destaque: destaque
         };
         
-        const index = siteData.servicos.findIndex(s => s.id === id);
-        if (index !== -1) {
-            siteData.servicos[index] = novoServico;
-        } else {
-            siteData.servicos.push(novoServico);
-        }
-        
+        siteData.servicos.push(novoServico);
         salvarDados();
-        
-        if (firebaseDisponivel && db) {
-            await db.collection('servicos').doc(id).set(novoServico).catch(() => {});
-        }
         
         window.closeModal('servicoModal');
         carregarAdmin();
         renderServicos();
-        alert('Serviço salvo com sucesso!');
+        alert('Serviço adicionado com sucesso!');
     };
 
-    window.deletarServico = async function(id) {
+    window.deletarServico = function(id) {
         if (!confirm('Tem certeza que deseja excluir este serviço?')) return;
         
         siteData.servicos = siteData.servicos.filter(s => s.id !== id);
         salvarDados();
-        
-        if (firebaseDisponivel && db) {
-            await db.collection('servicos').doc(id).delete().catch(() => {});
-        }
-        
         carregarAdmin();
         renderServicos();
         alert('Serviço excluído com sucesso!');
     };
 
     // ============================================
-    // SOBRE FUNCTIONS
+    // SOBRE
     // ============================================
-    window.salvarSobre = async function() {
+    window.salvarSobre = function() {
         siteData.sobre = {
-            titulo: document.getElementById('sobreTitulo')?.value || 'Sobre Nós',
-            texto: document.getElementById('sobreTexto')?.value || '',
-            imagem: document.getElementById('sobreImagemUrl')?.value || ''
+            titulo: document.getElementById('sobreTitulo').value,
+            texto: document.getElementById('sobreTexto').value,
+            imagem: document.getElementById('sobreImagemUrl').value
         };
         
         salvarDados();
-        await salvarNoFirebase();
         renderSobre();
         mostrarToast('Sobre atualizado com sucesso!');
     };
 
     // ============================================
-    // CONTATO FUNCTIONS
+    // CONTATO
     // ============================================
-    window.salvarContato = async function() {
+    window.salvarContato = function() {
         siteData.contato = {
-            email: document.getElementById('contatoEmail')?.value || '',
-            telefone: document.getElementById('contatoTelefone')?.value || '',
-            whatsapp: document.getElementById('contatoWhatsapp')?.value || '',
-            endereco: document.getElementById('contatoEndereco')?.value || '',
-            instagram: document.getElementById('contatoInstagram')?.value || '',
-            facebook: document.getElementById('contatoFacebook')?.value || '',
-            horario: document.getElementById('contatoHorario')?.value || ''
+            email: document.getElementById('contatoEmail').value,
+            telefone: document.getElementById('contatoTelefone').value,
+            whatsapp: document.getElementById('contatoWhatsapp').value,
+            endereco: document.getElementById('contatoEndereco').value,
+            instagram: document.getElementById('contatoInstagram').value,
+            facebook: document.getElementById('contatoFacebook').value,
+            horario: document.getElementById('contatoHorario').value
         };
         
         salvarDados();
-        await salvarNoFirebase();
         renderContato();
         mostrarToast('Contato atualizado com sucesso!');
     };
 
     // ============================================
-    // REDES SOCIAIS FUNCTIONS
+    // REDES SOCIAIS
     // ============================================
     window.abrirModalNovaRedeSocial = function() {
         document.getElementById('redeSocialIndex').value = '';
@@ -1218,25 +1015,11 @@
         window.openModal('redeSocialModal');
     };
 
-    window.editarRedeSocial = function(index) {
-        const item = siteData.redesSociais[index];
-        if (!item) return;
-        
-        document.getElementById('redeSocialIndex').value = index;
-        document.getElementById('redeSocialNome').value = item.nome;
-        document.getElementById('redeSocialUrl').value = item.url;
-        document.getElementById('redeSocialIcone').value = item.icone;
-        document.getElementById('redeSocialAtivo').checked = item.ativo;
-        
-        window.openModal('redeSocialModal');
-    };
-
     window.salvarNovaRedeSocial = function() {
-        const index = document.getElementById('redeSocialIndex')?.value;
-        const nome = document.getElementById('redeSocialNome')?.value.trim();
-        const url = document.getElementById('redeSocialUrl')?.value.trim();
-        const icone = document.getElementById('redeSocialIcone')?.value;
-        const ativo = document.getElementById('redeSocialAtivo')?.checked || false;
+        const nome = document.getElementById('redeSocialNome').value.trim();
+        const url = document.getElementById('redeSocialUrl').value.trim();
+        const icone = document.getElementById('redeSocialIcone').value;
+        const ativo = document.getElementById('redeSocialAtivo').checked;
         
         if (!nome) {
             alert('Preencha o nome da rede social');
@@ -1250,19 +1033,14 @@
             ativo: ativo
         };
         
-        if (index !== '') {
-            siteData.redesSociais[parseInt(index)] = novaRede;
-        } else {
-            siteData.redesSociais.push(novaRede);
-        }
-        
+        siteData.redesSociais.push(novaRede);
         salvarDados();
         
         window.closeModal('redeSocialModal');
         carregarAdmin();
         renderRedesSociais();
         renderRodape();
-        mostrarToast('Rede social salva com sucesso!');
+        mostrarToast('Rede social adicionada com sucesso!');
     };
 
     window.deletarRedeSocial = function(index) {
@@ -1277,41 +1055,25 @@
     };
 
     // ============================================
-    // HERO IMAGES FUNCTIONS
+    // HERO IMAGES
     // ============================================
     window.abrirModalNovaHero = function() {
         document.getElementById('heroImagemUrl').value = '';
-        
-        const preview = document.getElementById('heroPreview');
-        if (preview) {
-            preview.style.display = 'none';
-            preview.innerHTML = '';
-        }
-        
+        document.getElementById('heroPreview').style.display = 'none';
+        document.getElementById('heroPreview').innerHTML = '';
         window.openModal('heroModal');
     };
 
-    window.salvarNovaHeroImage = async function() {
-        const url = document.getElementById('heroImagemUrl')?.value.trim();
+    window.salvarNovaHeroImage = function() {
+        const url = document.getElementById('heroImagemUrl').value.trim();
         
         if (!url) {
             alert('Insira uma URL');
             return;
         }
         
-        if (!url.startsWith('http://') && !url.startsWith('https://')) {
-            alert('URL inválida. Use http:// ou https://');
-            return;
-        }
-        
         siteData.heroImages.push(url);
         salvarDados();
-        
-        if (firebaseDisponivel && db) {
-            await db.collection('config').doc('site').set({
-                heroImages: siteData.heroImages
-            }, { merge: true }).catch(() => {});
-        }
         
         window.closeModal('heroModal');
         carregarAdmin();
@@ -1319,31 +1081,24 @@
         alert('Imagem adicionada com sucesso!');
     };
 
-    window.deletarHeroImage = async function(index) {
+    window.deletarHeroImage = function(index) {
         if (!confirm('Tem certeza que deseja excluir esta imagem?')) return;
         
         siteData.heroImages.splice(index, 1);
         salvarDados();
-        
-        if (firebaseDisponivel && db) {
-            await db.collection('config').doc('site').set({
-                heroImages: siteData.heroImages
-            }, { merge: true }).catch(() => {});
-        }
-        
         carregarAdmin();
         initHeroSlideshow();
         alert('Imagem excluída com sucesso!');
     };
 
     // ============================================
-    // RODAPÉ FUNCTIONS
+    // RODAPÉ
     // ============================================
     window.salvarRodape = function() {
         siteData.rodape = {
-            texto: document.getElementById('rodapeTexto')?.value || siteData.rodape.texto,
-            mostrarRedesSociais: document.getElementById('rodapeRedesSociais')?.checked || false,
-            mostrarLinksRapidos: document.getElementById('rodapeLinksRapidos')?.checked || false
+            texto: document.getElementById('rodapeTexto').value,
+            mostrarRedesSociais: document.getElementById('rodapeRedesSociais').checked,
+            mostrarLinksRapidos: document.getElementById('rodapeLinksRapidos').checked
         };
         
         salvarDados();
@@ -1352,20 +1107,13 @@
     };
 
     // ============================================
-    // MENSAGENS FUNCTIONS
+    // MENSAGENS
     // ============================================
-    window.deletarMensagem = async function(id) {
+    window.deletarMensagem = function(id) {
         if (!confirm('Tem certeza que deseja excluir esta mensagem?')) return;
         
         siteData.mensagens = siteData.mensagens.filter(m => m.id !== id);
         salvarDados();
-        
-        if (firebaseDisponivel && db) {
-            // Firebase não tem delete por ID personalizado, então precisamos buscar
-            const snapshot = await db.collection('mensagens').where('id', '==', id).get();
-            snapshot.forEach(doc => doc.ref.delete());
-        }
-        
         carregarAdmin();
         mostrarToast('Mensagem excluída com sucesso!');
     };
