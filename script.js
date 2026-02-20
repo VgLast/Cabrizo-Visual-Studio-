@@ -322,6 +322,25 @@
         if (el) el.innerHTML = `<p>${siteData.sobre.texto}</p>`;
     }
 
+    function renderContato() {
+        const info = document.getElementById('contatoInfo');
+        if (!info) return;
+        
+        // Formatar Instagram (remover espaços para URL)
+        const instagramUser = siteData.contato.instagram.replace(/\s+/g, '');
+        const facebookUser = siteData.contato.facebook.replace(/\s+/g, '');
+        
+        info.innerHTML = `
+            <h3>Informações de Contato</h3>
+            <p><i class="fas fa-envelope"></i> ${siteData.contato.email}</p>
+            <p><i class="fas fa-phone"></i> ${siteData.contato.telefone}</p>
+            <p><i class="fab fa-whatsapp"></i> <a href="https://wa.me/${siteData.contato.whatsapp}" target="_blank">WhatsApp</a></p>
+            <p><i class="fas fa-map-marker-alt"></i> ${siteData.contato.endereco}</p>
+            <p><i class="fab fa-instagram"></i> <a href="https://instagram.com/${instagramUser}" target="_blank">${siteData.contato.instagram}</a></p>
+            <p><i class="fab fa-facebook"></i> <a href="https://facebook.com/${facebookUser}" target="_blank">${siteData.contato.facebook}</a></p>
+        `;
+    }
+    
     
     function renderRedesSociais() {
         const links = document.getElementById('socialLinks');
@@ -348,25 +367,6 @@
         }
         
         const redesFooter = document.getElementById('redesSociaisFooter');
-
-        function renderContato() {
-    const info = document.getElementById('contatoInfo');
-    if (!info) return;
-    
-    // Usava siteData.contato (que vinha dos DADOS_INICIAIS)
-    const instagramUser = siteData.contato.instagram.replace(/\s+/g, '');
-    const facebookUser = siteData.contato.facebook.replace(/\s+/g, '');
-    
-    info.innerHTML = `
-        <h3>Informações de Contato</h3>
-        <p><i class="fas fa-envelope"></i> <a href="mailto:${siteData.contato.email}">${siteData.contato.email}</a></p>
-        <p><i class="fas fa-phone"></i> <a href="tel:${siteData.contato.telefone}">${siteData.contato.telefone}</a></p>
-        <p><i class="fab fa-whatsapp"></i> <a href="https://wa.me/${siteData.contato.whatsapp}" target="_blank">WhatsApp: ${siteData.contato.whatsapp}</a></p>
-        <p><i class="fas fa-map-marker-alt"></i> ${siteData.contato.endereco}</p>
-        <p><i class="fab fa-instagram"></i> <a href="https://instagram.com/${instagramUser}" target="_blank">${siteData.contato.instagram}</a></p>
-        <p><i class="fab fa-facebook"></i> <a href="https://facebook.com/${facebookUser}" target="_blank">${siteData.contato.facebook}</a></p>
-    `;
-        }
         
         if (redesFooter) {
             redesFooter.style.display = siteData.rodape.mostrarRedesSociais ? 'block' : 'none';
