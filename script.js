@@ -79,20 +79,20 @@
             }
         ],
         contato: {
-            email: "contato@cabrizovisual.com",
-            telefone: "(11) 99999-9999",
-            whatsapp: "5511999999999",
-            endereco: "São Paulo, SP",
-            instagram: "@cabrizovisual",
-            facebook: "/cabrizovisual"
+            email: "acabrizo@gmail.com",
+            telefone: "863816035",
+            whatsapp: "863816035",
+            endereco: "Beira,Mozambique",
+            instagram: "angelo cabrizo",
+            facebook: "angelo cabrizo"
         },
         redesSociais: [
-            { nome: "Instagram", url: "https://instagram.com/cabrizovisual", icone: "fa-instagram" },
-            { nome: "Facebook", url: "https://facebook.com/cabrizovisual", icone: "fa-facebook" }
+            { nome: "Instagram", url: "https://instagram.com/angelo cabrizo", icone: "fa-instagram" },
+            { nome: "Facebook", url: "https://facebook.com/angelo cabrizo", icone: "fa-facebook" }
         ],
         mensagens: []
     };
-
+        
     // ============================================
     // VARIÁVEIS GLOBAIS
     // ============================================
