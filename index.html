@@ -50,7 +50,7 @@
                     <span>Cabrizo</span>
                     <span class="typing-text" id="typingEffect"></span>
                 </h1>
-                <p class="animate-text">Fotografia com arte, luz e emoção</p>
+                <p class="animate-text" id="siteDescricaoDisplay">Fotografia com arte, luz e emoção</p>
                 <div class="hero-buttons">
                     <a href="#portfolio" class="btn btn-primary">Ver Portfólio</a>
                     <a href="#contato" class="btn btn-secondary">Solicitar Orçamento</a>
@@ -66,12 +66,8 @@
         <section id="portfolio" class="portfolio">
             <div class="container">
                 <h2 class="section-title">Nosso Portfólio</h2>
-                <div class="portfolio-filters">
-                    <button class="filter-btn active" data-filter="todos">Todos</button>
-                    <button class="filter-btn" data-filter="Casamento">Casamento</button>
-                    <button class="filter-btn" data-filter="Moda">Moda</button>
-                    <button class="filter-btn" data-filter="Corporativo">Corporativo</button>
-                    <button class="filter-btn" data-filter="Ensaio">Ensaios</button>
+                <div class="portfolio-filters" id="portfolioFilters">
+                    <!-- Filtros serão gerados dinamicamente -->
                 </div>
                 <div class="portfolio-grid" id="portfolioGrid"></div>
             </div>
@@ -81,7 +77,7 @@
         <section id="sobre" class="sobre">
             <div class="container">
                 <div class="sobre-content">
-                    <h2 class="section-title">Sobre Nós</h2>
+                    <h2 class="section-title" id="sobreTituloDisplay">Sobre Nós</h2>
                     <div class="sobre-text" id="sobreTexto"></div>
                 </div>
             </div>
@@ -132,7 +128,7 @@
                         <h3>Cabrizo Visual Studio</h3>
                         <p>Fotografia profissional com excelência e criatividade.</p>
                     </div>
-                    <div class="footer-section">
+                    <div class="footer-section" id="linksRapidosSection">
                         <h3>Links Rápidos</h3>
                         <ul>
                             <li><a href="#home">Início</a></li>
@@ -142,7 +138,7 @@
                             <li><a href="#contato">Contato</a></li>
                         </ul>
                     </div>
-                    <div class="footer-section">
+                    <div class="footer-section" id="redesSociaisFooter">
                         <h3>Redes Sociais</h3>
                         <div class="social-links" id="socialLinks"></div>
                     </div>
@@ -190,18 +186,21 @@
             <div class="admin-nav">
                 <ul>
                     <li class="active" data-section="dashboard"><i class="fas fa-home"></i> Dashboard</li>
+                    <li data-section="configuracoes"><i class="fas fa-cog"></i> Configurações</li>
                     <li data-section="portfolio"><i class="fas fa-images"></i> Portfólio</li>
+                    <li data-section="categorias"><i class="fas fa-tags"></i> Categorias</li>
                     <li data-section="servicos"><i class="fas fa-cog"></i> Serviços</li>
                     <li data-section="sobre"><i class="fas fa-info-circle"></i> Sobre Nós</li>
                     <li data-section="contato"><i class="fas fa-address-book"></i> Contato</li>
                     <li data-section="redes"><i class="fas fa-share-alt"></i> Redes Sociais</li>
                     <li data-section="hero"><i class="fas fa-sliders-h"></i> Hero Images</li>
+                    <li data-section="rodape"><i class="fas fa-shoe-prints"></i> Rodapé</li>
                     <li data-section="mensagens"><i class="fas fa-envelope"></i> Mensagens</li>
                 </ul>
             </div>
             
             <div class="admin-content">
-                <!-- DASHBOARD -->
+                <!-- ===== DASHBOARD ===== -->
                 <div id="dashboard" class="admin-section active">
                     <h2>Dashboard</h2>
                     <div class="stats-grid">
@@ -225,16 +224,64 @@
                     <div id="ultimasMensagens" class="items-list"></div>
                 </div>
                 
-                <!-- PORTFÓLIO -->
+                <!-- ===== CONFIGURAÇÕES GERAIS ===== -->
+                <div id="configuracoes" class="admin-section">
+                    <h2>Configurações do Site</h2>
+                    
+                    <div class="form-group">
+                        <label>Título do Site</label>
+                        <input type="text" id="siteTitulo" class="form-control">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Descrição do Site</label>
+                        <input type="text" id="siteDescricao" class="form-control">
+                    </div>
+                    
+                    <h3>Configurações do Logo</h3>
+                    <div class="form-group">
+                        <label>Tipo de Logo</label>
+                        <select id="logoTipo" class="form-control">
+                            <option value="texto">Texto</option>
+                            <option value="imagem">Imagem</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Texto do Logo (HTML permitido)</label>
+                        <input type="text" id="logoTexto" class="form-control" value="Cabrizo <span>Visual Studio</span>">
+                        <small>Use <span> para destacar parte do texto</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>URL da Imagem do Logo</label>
+                        <input type="url" id="logoImagemUrl" class="form-control" placeholder="https://exemplo.com/logo.png">
+                    </div>
+                    
+                    <button class="btn-save" onclick="salvarConfiguracoes()">
+                        <i class="fas fa-save"></i> Salvar Configurações
+                    </button>
+                </div>
+                
+                <!-- ===== PORTFÓLIO ===== -->
                 <div id="portfolio" class="admin-section">
                     <h2>Gerenciar Portfólio</h2>
                     <button class="btn-add" onclick="abrirModalNovaFoto()">
-                        <i class="fas fa-plus"></i> Nova Foto (URL)
+                        <i class="fas fa-plus"></i> Nova Foto
                     </button>
                     <div id="portfolioList" class="items-list"></div>
                 </div>
                 
-                <!-- SERVIÇOS -->
+                <!-- ===== CATEGORIAS ===== -->
+                <div id="categorias" class="admin-section">
+                    <h2>Gerenciar Categorias</h2>
+                    <button class="btn-add" onclick="abrirModalNovaCategoria()">
+                        <i class="fas fa-plus"></i> Nova Categoria
+                    </button>
+                    <div id="categoriasList" class="items-list"></div>
+                </div>
+                
+                <!-- ===== SERVIÇOS ===== -->
                 <div id="servicos" class="admin-section">
                     <h2>Gerenciar Serviços</h2>
                     <button class="btn-add" onclick="abrirModalNovoServico()">
@@ -243,55 +290,71 @@
                     <div id="servicosList" class="items-list"></div>
                 </div>
                 
-                <!-- SOBRE NÓS -->
+                <!-- ===== SOBRE NÓS ===== -->
                 <div id="sobre" class="admin-section">
                     <h2>Editar Sobre Nós</h2>
                     <div class="form-group">
                         <label>Título</label>
-                        <input type="text" id="sobreTitulo" class="form-control" value="Sobre Nós">
+                        <input type="text" id="sobreTitulo" class="form-control">
                     </div>
                     <div class="form-group">
                         <label>Texto</label>
                         <textarea id="sobreTexto" rows="8" class="form-control"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>URL da Imagem (opcional)</label>
+                        <input type="url" id="sobreImagemUrl" class="form-control" placeholder="https://exemplo.com/imagem.jpg">
                     </div>
                     <button class="btn-save" onclick="salvarSobre()">
                         <i class="fas fa-save"></i> Salvar Alterações
                     </button>
                 </div>
                 
-                <!-- CONTATO -->
+                <!-- ===== CONTATO ===== -->
                 <div id="contato" class="admin-section">
                     <h2>Editar Contato</h2>
+                    
                     <div class="form-group">
                         <label>E-mail</label>
                         <input type="email" id="contatoEmail" class="form-control">
                     </div>
+                    
                     <div class="form-group">
                         <label>Telefone</label>
                         <input type="text" id="contatoTelefone" class="form-control">
                     </div>
+                    
                     <div class="form-group">
-                        <label>WhatsApp (código do país)</label>
+                        <label>WhatsApp (apenas números)</label>
                         <input type="text" id="contatoWhatsapp" class="form-control">
                     </div>
+                    
                     <div class="form-group">
                         <label>Endereço</label>
                         <input type="text" id="contatoEndereco" class="form-control">
                     </div>
+                    
                     <div class="form-group">
-                        <label>Instagram</label>
+                        <label>Instagram (nome de usuário)</label>
                         <input type="text" id="contatoInstagram" class="form-control">
                     </div>
+                    
                     <div class="form-group">
-                        <label>Facebook</label>
+                        <label>Facebook (nome de usuário)</label>
                         <input type="text" id="contatoFacebook" class="form-control">
                     </div>
+                    
+                    <div class="form-group">
+                        <label>Horário de Funcionamento</label>
+                        <input type="text" id="contatoHorario" class="form-control" placeholder="Seg - Sex: 9h às 18h">
+                    </div>
+                    
                     <button class="btn-save" onclick="salvarContato()">
-                        <i class="fas fa-save"></i> Salvar Alterações
+                        <i class="fas fa-save"></i> Salvar Contato
                     </button>
                 </div>
                 
-                <!-- REDES SOCIAIS -->
+                <!-- ===== REDES SOCIAIS ===== -->
                 <div id="redes" class="admin-section">
                     <h2>Redes Sociais</h2>
                     <button class="btn-add" onclick="abrirModalNovaRedeSocial()">
@@ -300,16 +363,42 @@
                     <div id="redesList" class="items-list"></div>
                 </div>
                 
-                <!-- HERO IMAGES -->
+                <!-- ===== HERO IMAGES ===== -->
                 <div id="hero" class="admin-section">
-                    <h2>Hero Images</h2>
+                    <h2>Hero Images (Slideshow)</h2>
                     <button class="btn-add" onclick="abrirModalNovaHero()">
-                        <i class="fas fa-plus"></i> Nova Imagem (URL)
+                        <i class="fas fa-plus"></i> Nova Imagem
                     </button>
                     <div id="heroList" class="items-list"></div>
                 </div>
                 
-                <!-- MENSAGENS -->
+                <!-- ===== RODAPÉ ===== -->
+                <div id="rodape" class="admin-section">
+                    <h2>Configurações do Rodapé</h2>
+                    
+                    <div class="form-group">
+                        <label>Texto do Rodapé</label>
+                        <input type="text" id="rodapeTexto" class="form-control">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="rodapeRedesSociais"> Mostrar Redes Sociais no Rodapé
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="rodapeLinksRapidos"> Mostrar Links Rápidos no Rodapé
+                        </label>
+                    </div>
+                    
+                    <button class="btn-save" onclick="salvarRodape()">
+                        <i class="fas fa-save"></i> Salvar Rodapé
+                    </button>
+                </div>
+                
+                <!-- ===== MENSAGENS ===== -->
                 <div id="mensagens" class="admin-section">
                     <h2>Mensagens Recebidas</h2>
                     <div id="mensagensList" class="items-list"></div>
@@ -326,8 +415,8 @@
     <div id="portfolioModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Nova Foto (URL)</h3>
-                <span class="modal-close" onclick="fecharModal('portfolioModal')">&times;</span>
+                <h3>Nova Foto</h3>
+                <span class="modal-close" onclick="closeModal('portfolioModal')">&times;</span>
             </div>
             <form id="portfolioForm" onsubmit="event.preventDefault(); salvarFotoPorUrl()">
                 <input type="hidden" id="portfolioId">
@@ -339,7 +428,7 @@
                 
                 <div class="form-group">
                     <label>Categoria</label>
-                    <select id="portfolioCategoria" required>
+                    <select id="portfolioCategoria" class="categoria-select" required>
                         <option value="Casamento">Casamento</option>
                         <option value="Moda">Moda</option>
                         <option value="Corporativo">Corporativo</option>
@@ -365,7 +454,32 @@
                     <button type="submit" class="btn-save" style="flex: 1;">
                         <i class="fas fa-save"></i> Salvar Foto
                     </button>
-                    <button type="button" class="btn-voltar" onclick="fecharModal('portfolioModal')" style="flex: 0.3;">
+                    <button type="button" class="btn-voltar" onclick="closeModal('portfolioModal')" style="flex: 0.3;">
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Modal CATEGORIA -->
+    <div id="categoriaModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Nova Categoria</h3>
+                <span class="modal-close" onclick="closeModal('categoriaModal')">&times;</span>
+            </div>
+            <form onsubmit="event.preventDefault(); salvarNovaCategoria()">
+                <div class="form-group">
+                    <label>Nome da Categoria</label>
+                    <input type="text" id="novaCategoria" placeholder="Ex: Casamento" required>
+                </div>
+                
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button type="submit" class="btn-save" style="flex: 1;">
+                        <i class="fas fa-save"></i> Salvar Categoria
+                    </button>
+                    <button type="button" class="btn-voltar" onclick="closeModal('categoriaModal')" style="flex: 0.3;">
                         Cancelar
                     </button>
                 </div>
@@ -378,7 +492,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3>Novo Serviço</h3>
-                <span class="modal-close" onclick="fecharModal('servicoModal')">&times;</span>
+                <span class="modal-close" onclick="closeModal('servicoModal')">&times;</span>
             </div>
             <form id="servicoForm" onsubmit="event.preventDefault(); salvarNovoServico()">
                 <input type="hidden" id="servicoId">
@@ -391,6 +505,11 @@
                 <div class="form-group">
                     <label>Descrição</label>
                     <textarea id="servicoDescricao" rows="4" placeholder="Descreva o serviço..." required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Preço (opcional)</label>
+                    <input type="text" id="servicoPreco" placeholder="Ex: A partir de R$ 500">
                 </div>
                 
                 <div class="form-group">
@@ -407,11 +526,17 @@
                     </select>
                 </div>
                 
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="servicoDestaque"> Serviço em Destaque
+                    </label>
+                </div>
+                
                 <div style="display: flex; gap: 10px; margin-top: 20px;">
                     <button type="submit" class="btn-save" style="flex: 1;">
                         <i class="fas fa-save"></i> Salvar Serviço
                     </button>
-                    <button type="button" class="btn-voltar" onclick="fecharModal('servicoModal')" style="flex: 0.3;">
+                    <button type="button" class="btn-voltar" onclick="closeModal('servicoModal')" style="flex: 0.3;">
                         Cancelar
                     </button>
                 </div>
@@ -424,9 +549,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3>Nova Rede Social</h3>
-                <span class="modal-close" onclick="fecharModal('redeSocialModal')">&times;</span>
+                <span class="modal-close" onclick="closeModal('redeSocialModal')">&times;</span>
             </div>
-           <form id="redeSocialForm" onsubmit="event.preventDefault(); salvarNovaRedeSocial()">
+            <form id="redeSocialForm" onsubmit="event.preventDefault(); salvarNovaRedeSocial()">
                 <input type="hidden" id="redeSocialIndex">
                 
                 <div class="form-group">
@@ -436,7 +561,7 @@
                 
                 <div class="form-group">
                     <label>URL Completa</label>
-                    <input type="url" id="redeSocialUrl" placeholder="https://instagram.com/cabrizovisual" required>
+                    <input type="url" id="redeSocialUrl" placeholder="https://instagram.com/angelocabrizo">
                 </div>
                 
                 <div class="form-group">
@@ -452,11 +577,17 @@
                     </select>
                 </div>
                 
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="redeSocialAtivo" checked> Ativo (mostrar no site)
+                    </label>
+                </div>
+                
                 <div style="display: flex; gap: 10px; margin-top: 20px;">
                     <button type="submit" class="btn-save" style="flex: 1;">
                         <i class="fas fa-save"></i> Salvar Rede Social
                     </button>
-                    <button type="button" class="btn-voltar" onclick="fecharModal('redeSocialModal')" style="flex: 0.3;">
+                    <button type="button" class="btn-voltar" onclick="closeModal('redeSocialModal')" style="flex: 0.3;">
                         Cancelar
                     </button>
                 </div>
@@ -469,9 +600,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3>Nova Imagem Hero</h3>
-                <span class="modal-close" onclick="fecharModal('heroModal')">&times;</span>
+                <span class="modal-close" onclick="closeModal('heroModal')">&times;</span>
             </div>
-            <form id="heroForm" onsubmit="event.preventDefault(); salvarNovaHeroImage()">
+            <form onsubmit="event.preventDefault(); salvarNovaHeroImage()">
                 <div class="form-group">
                     <label>URL da Imagem (HTTPS)</label>
                     <input type="url" id="heroImagemUrl" placeholder="https://exemplo.com/imagem.jpg" required>
@@ -484,7 +615,7 @@
                     <button type="submit" class="btn-save" style="flex: 1;">
                         <i class="fas fa-save"></i> Adicionar Imagem
                     </button>
-                    <button type="button" class="btn-voltar" onclick="fecharModal('heroModal')" style="flex: 0.3;">
+                    <button type="button" class="btn-voltar" onclick="closeModal('heroModal')" style="flex: 0.3;">
                         Cancelar
                     </button>
                 </div>
@@ -494,4 +625,4 @@
 
     <script src="script.js"></script>
 </body>
-</html>
+                        </html>
