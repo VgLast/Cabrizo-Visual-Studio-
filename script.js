@@ -322,25 +322,7 @@
         if (el) el.innerHTML = `<p>${siteData.sobre.texto}</p>`;
     }
 
-    function renderContato() {
-        const info = document.getElementById('contatoInfo');
-        if (!info) return;
-        
-        const instagramUser = siteData.contato.instagram.replace(/\s+/g, '');
-        const facebookUser = siteData.contato.facebook.replace(/\s+/g, '');
-        
-        info.innerHTML = `
-            <h3>Informações de Contato</h3>
-            <p><i class="fas fa-envelope"></i> <a href="mailto:${siteData.contato.email}">${siteData.contato.email}</a></p>
-            <p><i class="fas fa-phone"></i> <a href="tel:${siteData.contato.telefone}">${siteData.contato.telefone}</a></p>
-            <p><i class="fab fa-whatsapp"></i> <a href="https://wa.me/${siteData.contato.whatsapp}" target="_blank">WhatsApp: ${siteData.contato.whatsapp}</a></p>
-            <p><i class="fas fa-map-marker-alt"></i> ${siteData.contato.endereco}</p>
-            <p><i class="fab fa-instagram"></i> <a href="https://instagram.com/${instagramUser}" target="_blank">${siteData.contato.instagram}</a></p>
-            <p><i class="fab fa-facebook"></i> <a href="https://facebook.com/${facebookUser}" target="_blank">${siteData.contato.facebook}</a></p>
-            ${siteData.contato.horario ? `<p><i class="fas fa-clock"></i> ${siteData.contato.horario}</p>` : ''}
-        `;
-    }
-
+    
     function renderRedesSociais() {
         const links = document.getElementById('socialLinks');
         if (!links) return;
@@ -366,6 +348,38 @@
         }
         
         const redesFooter = document.getElementById('redesSociaisFooter');
+       
+        // ============================================
+// RENDERIZAR CONTATO (COM SUAS INFORMAÇÕES)
+// ============================================
+function renderContato() {
+    const info = document.getElementById('contatoInfo');
+    if (!info) return;
+    
+    // Suas informações pessoais
+    const contato = {
+        email: "acabrizo@gmail.com",
+        telefone: "863816035",
+        whatsapp: "863816035",
+        endereco: "Beira, Mozambique",
+        instagram: "angelo cabrizo",
+        facebook: "angelo cabrizo"
+    };
+    
+    // Formatar para URL (remover espaços)
+    const instagramUser = contato.instagram.replace(/\s+/g, '');
+    const facebookUser = contato.facebook.replace(/\s+/g, '');
+    
+    info.innerHTML = `
+        <h3>Informações de Contato</h3>
+        <p><i class="fas fa-envelope"></i> <a href="mailto:${contato.email}">${contato.email}</a></p>
+        <p><i class="fas fa-phone"></i> <a href="tel:${contato.telefone}">${contato.telefone}</a></p>
+        <p><i class="fab fa-whatsapp"></i> <a href="https://wa.me/${contato.whatsapp}" target="_blank">WhatsApp: ${contato.whatsapp}</a></p>
+        <p><i class="fas fa-map-marker-alt"></i> ${contato.endereco}</p>
+        <p><i class="fab fa-instagram"></i> <a href="https://instagram.com/${instagramUser}" target="_blank">${contato.instagram}</a></p>
+        <p><i class="fab fa-facebook"></i> <a href="https://facebook.com/${facebookUser}" target="_blank">${contato.facebook}</a></p>
+    `;
+} 
         if (redesFooter) {
             redesFooter.style.display = siteData.rodape.mostrarRedesSociais ? 'block' : 'none';
         }
