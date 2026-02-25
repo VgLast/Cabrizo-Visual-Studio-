@@ -3,624 +3,426 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cabrizo Visual Studio - Fotografia Profissional</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Cabrizo Visual Studio | Fotografia de Arte</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Cursor Personalizado -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
     <!-- Header -->
-    <header class="site-header">
-        <nav class="navbar">
-            <div class="logo" id="siteLogo">
-                <h1>Cabrizo <span>Visual Studio</span></h1>
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <h1 class="logo-text">Cabrizo <span>Visual Studio</span></h1>
             </div>
             
-            <ul class="nav-menu">
-                <li><a href="#home" class="nav-link">Início</a></li>
-                <li><a href="#portfolio" class="nav-link">Portfólio</a></li>
-                <li><a href="#sobre" class="nav-link">Sobre</a></li>
-                <li><a href="#servicos" class="nav-link">Serviços</a></li>
-                <li><a href="#contato" class="nav-link">Contato</a></li>
-            </ul>
+            <nav class="nav-menu">
+                <ul>
+                    <li><a href="#home" class="nav-link active">Início</a></li>
+                    <li><a href="#portfolio" class="nav-link">Portfólio</a></li>
+                    <li><a href="#about" class="nav-link">Sobre</a></li>
+                    <li><a href="#services" class="nav-link">Serviços</a></li>
+                    <li><a href="#gallery" class="nav-link">Galeria</a></li>
+                    <li><a href="#contact" class="nav-link">Contato</a></li>
+                </ul>
+            </nav>
 
-            <div class="mobile-menu-btn">
-                <span></span>
-                <span></span>
-                <span></span>
+            <div class="header-right">
+                <a href="#contact" class="btn-header">Agendar</a>
+                <div class="menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
             </div>
-
-            <div class="admin-btn">
-                <a href="#" onclick="showAdminLogin(); return false;" class="btn-admin">
-                    <i class="fas fa-lock"></i> Admin
-                </a>
-            </div>
-        </nav>
+        </div>
     </header>
 
-    <!-- Site Principal -->
-    <div id="sitePrincipal">
-        <!-- Hero Section -->
-        <section id="home" class="hero">
-            <div class="hero-slideshow" id="heroSlideshow"></div>
-            <div class="hero-content">
-                <h1 class="animate-title">
-                    <span>Cabrizo</span>
-                    <span class="typing-text" id="typingEffect"></span>
-                </h1>
-                <p class="animate-text" id="siteDescricaoDisplay">Fotografia com arte, luz e emoção</p>
-                <div class="hero-buttons">
-                    <a href="#portfolio" class="btn btn-primary">Ver Portfólio</a>
-                    <a href="#contato" class="btn btn-secondary">Solicitar Orçamento</a>
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-slider" id="heroSlider"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <span class="hero-subtitle animate-text">Cabrizo Visual Studio</span>
+            <h1 class="hero-title">
+                <span class="static-text">Arte em</span>
+                <span class="typing-text" id="typingEffect"></span>
+            </h1>
+            <p class="hero-description">Fotografia que transcende o momento, eternizando emoções através da luz e da arte.</p>
+            <div class="hero-buttons">
+                <a href="#portfolio" class="btn btn-primary">Explorar Portfólio</a>
+                <a href="#contact" class="btn btn-secondary">Fale Conosco</a>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span>Descubra</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="hero-social">
+            <a href="https://instagram.com/angelocabrizo" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://facebook.com/angelocabrizo" target="_blank"><i class="fab fa-facebook"></i></a>
+            <a href="https://wa.me/863816035" target="_blank"><i class="fab fa-whatsapp"></i></a>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="portfolio">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle">Portfólio</span>
+                <h2 class="section-title">Trabalhos em Destaque</h2>
+                <p class="section-description">Explore nossa coleção de momentos únicos capturados com maestria e criatividade.</p>
+            </div>
+
+            <div class="portfolio-filters">
+                <button class="filter-btn active" data-filter="all">Todos</button>
+                <button class="filter-btn" data-filter="casamento">Casamento</button>
+                <button class="filter-btn" data-filter="moda">Moda</button>
+                <button class="filter-btn" data-filter="corporativo">Corporativo</button>
+                <button class="filter-btn" data-filter="ensaio">Ensaio</button>
+                <button class="filter-btn" data-filter="eventos">Eventos</button>
+            </div>
+
+            <div class="portfolio-grid" id="portfolioGrid"></div>
+
+            <div class="portfolio-more">
+                <button class="btn btn-outline" id="loadMoreBtn">Carregar Mais</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="about-wrapper">
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1554048612-b76cec16b29d?w=800" alt="Cabrizo Visual Studio">
+                    <div class="about-image-overlay">
+                        <div class="about-experience">
+                            <span class="experience-number">10+</span>
+                            <span class="experience-text">Anos de Experiência</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-content">
+                    <span class="section-subtitle">Sobre Nós</span>
+                    <h2 class="section-title">Cabrizo Visual Studio</h2>
+                    <p class="about-text">Somos um estúdio de fotografia dedicado a capturar a essência de cada momento. Com mais de uma década de experiência, transformamos histórias em imagens que emocionam e eternizam.</p>
+                    
+                    <div class="about-stats">
+                        <div class="stat-item">
+                            <span class="stat-number" data-count="500">0</span>
+                            <span class="stat-label">Projetos</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" data-count="300">0</span>
+                            <span class="stat-label">Clientes</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" data-count="15">0</span>
+                            <span class="stat-label">Prêmios</span>
+                        </div>
+                    </div>
+
+                    <div class="about-features">
+                        <div class="feature">
+                            <i class="fas fa-camera"></i>
+                            <h4>Equipamento Profissional</h4>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-paint-brush"></i>
+                            <h4>Edição Criativa</h4>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-heart"></i>
+                            <h4>Paixão pelo Trabalho</h4>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="hero-scroll-indicator">
-                <span>Scroll</span>
-                <i class="fas fa-chevron-down"></i>
-            </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Portfolio Section -->
-        <section id="portfolio" class="portfolio">
-            <div class="container">
-                <h2 class="section-title">Nosso Portfólio</h2>
-                <div class="portfolio-filters" id="portfolioFilters">
-                    <!-- Filtros serão gerados dinamicamente -->
+    <!-- Services Section -->
+    <section id="services" class="services">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle">Serviços</span>
+                <h2 class="section-title">O que Oferecemos</h2>
+                <p class="section-description">Soluções completas em fotografia para todos os momentos especiais.</p>
+            </div>
+
+            <div class="services-grid" id="servicesGrid"></div>
+        </div>
+    </section>
+
+    <!-- ===== CARROSSEL 3D SECTION ===== -->
+    <section class="carrossel-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle">Experiência Visual</span>
+                <h2 class="section-title">Momentos em 3D</h2>
+                <p class="section-description">Navegue por nossos trabalhos em uma perspectiva única.</p>
+            </div>
+            
+            <div class="carrossel-container">
+                <div class="carrossel">
+                    <!-- Imagem 1 -->
+                    <div class="carrossel-item" style="--i:0">
+                        <img src="https://i.postimg.cc/8CXrLD5t/DSC-5773.jpg?w=400&fm=jpg" alt="Casamento">
+                    </div>
+                    <!-- Imagem 2 -->
+                    <div class="carrossel-item" style="--i:1">
+                        <img src="https://i.postimg.cc/xTFDr4cF/ANG-9033.jpg?w=400&fm=jpg" alt="Moda">
+                    </div>
+                    <!-- Imagem 3 -->
+                    <div class="carrossel-item" style="--i:2">
+                        <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?w=400&fm=jpg" alt="Corporativo">
+                    </div>
+                    <!-- Imagem 4 -->
+                    <div class="carrossel-item" style="--i:3">
+                        <img src="https://images.unsplash.com/photo-1544427920-c49ccfb85579?w=400&fm=jpg" alt="Ensaio">
+                    </div>
+                    <!-- Imagem 5 -->
+                    <div class="carrossel-item" style="--i:4">
+                        <img src="https://i.postimg.cc/hGVFncY8/ANG-7622.jpg?w=400&fm=jpg" alt="Casamento">
+                    </div>
+                    <!-- Imagem 6 -->
+                    <div class="carrossel-item" style="--i:5">
+                        <img src="https://i.postimg.cc/xTFDr4cF/ANG-9033.jpg?w=400&fm=jpg" alt="Book">
+                    </div>
+                    <!-- Imagem 7 -->
+                    <div class="carrossel-item" style="--i:6">
+                        <img src="https://i.postimg.cc/8CXrLD5t/DSC-5773.jpg?w=400&fm=jpg" alt="Eventos">
+                    </div>
+                    <!-- Imagem 8 -->
+                    <div class="carrossel-item" style="--i:7">
+                        <img src="https://i.postimg.cc/Pq9BLpmw/ANG-7086.jpg?w=400&fm=jpg" alt="Gastronomia">
+                    </div>
                 </div>
-                <div class="portfolio-grid" id="portfolioGrid"></div>
             </div>
-        </section>
+            
+            <p class="carrossel-dica">✨ Passe o mouse para pausar | Deslize para explorar ✨</p>
+        </div>
+    </section>
 
-        <!-- Sobre Section -->
-        <section id="sobre" class="sobre">
-            <div class="container">
-                <div class="sobre-content">
-                    <h2 class="section-title" id="sobreTituloDisplay">Sobre Nós</h2>
-                    <div class="sobre-text" id="sobreTexto"></div>
+    <!-- Gallery Section -->
+    <section id="gallery" class="gallery">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle">Galeria</span>
+                <h2 class="section-title">Momentos em Foco</h2>
+                <p class="section-description">Uma seleção especial dos nossos melhores trabalhos.</p>
+            </div>
+
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle">Depoimentos</span>
+                <h2 class="section-title">O que dizem nossos clientes</h2>
+            </div>
+
+            <div class="testimonials-slider" id="testimonialsSlider"></div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="contact-wrapper">
+                <div class="contact-info">
+                    <span class="section-subtitle">Contato</span>
+                    <h2 class="section-title">Vamos Conversar</h2>
+                    
+                    <div class="info-items">
+                        <div class="info-item">
+                            <i class="fas fa-envelope"></i>
+                            <div>
+                                <h4>Email</h4>
+                                <a href="mailto:acabrizo@gmail.com">acabrizo@gmail.com</a>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <i class="fas fa-phone"></i>
+                            <div>
+                                <h4>Telefone</h4>
+                                <a href="tel:863816035">+258863816035</a>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <i class="fab fa-whatsapp"></i>
+                            <div>
+                                <h4>WhatsApp</h4>
+                                <a href="https://wa.me/863816035" target="_blank">863816035</a>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div>
+                                <h4>Endereço</h4>
+                                <p>Beira, Mozambique</p>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <i class="fab fa-instagram"></i>
+                            <div>
+                                <h4>Instagram</h4>
+                                <a href="https://instagram.com/angelocabrizo" target="_blank">@angelocabrizo</a>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <i class="fab fa-facebook"></i>
+                            <div>
+                                <h4>Facebook</h4>
+                                <a href="https://facebook.com/angelocabrizo" target="_blank">/angelocabrizo</a>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <i class="fas fa-clock"></i>
+                            <div>
+                                <h4>Horário</h4>
+                                <p>Seg - Sex: 9h às 18h<br>Sáb: 9h às 13h</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </section>
 
-        <!-- Serviços Section -->
-        <section id="servicos" class="servicos">
-            <div class="container">
-                <h2 class="section-title">Nossos Serviços</h2>
-                <div class="servicos-grid" id="servicosGrid"></div>
-            </div>
-        </section>
-
-        <!-- Contato Section -->
-        <section id="contato" class="contato">
-            <div class="container">
-                <h2 class="section-title">Entre em Contato</h2>
-                <div class="contato-container">
-                    <form id="contatoForm" class="contato-form">
+                <div class="contact-form">
+                    <h3>Envie sua Mensagem</h3>
+                    
+                    <form id="contactForm">
                         <div class="form-group">
-                            <input type="text" name="nome" placeholder="Seu Nome" required>
+                            <input type="text" id="nome" placeholder="Seu Nome" required>
                             <i class="fas fa-user"></i>
                         </div>
+                        
                         <div class="form-group">
-                            <input type="email" name="email" placeholder="Seu E-mail" required>
+                            <input type="email" id="email" placeholder="Seu Email">
                             <i class="fas fa-envelope"></i>
                         </div>
+                        
                         <div class="form-group">
-                            <input type="text" name="assunto" placeholder="Assunto">
+                            <input type="text" id="assunto" placeholder="Assunto">
                             <i class="fas fa-tag"></i>
                         </div>
+                        
                         <div class="form-group">
-                            <textarea name="mensagem" placeholder="Sua Mensagem" rows="5" required></textarea>
+                            <textarea id="mensagem" placeholder="Sua Mensagem" rows="5" required></textarea>
                             <i class="fas fa-comment"></i>
                         </div>
-                        <button type="submit" class="btn btn-primary">Enviar Mensagem</button>
+                        
+                        <button type="button" class="btn btn-primary btn-block" onclick="enviarWhatsApp()">
+                            <i class="fab fa-whatsapp"></i> Enviar via WhatsApp
+                        </button>
                     </form>
-                    <div class="contato-info" id="contatoInfo"></div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Footer -->
-        <footer>
-            <div class="container">
-                <div class="footer-content">
-                    <div class="footer-section">
-                        <h3>Cabrizo Visual Studio</h3>
-                        <p>Fotografia profissional com excelência e criatividade.</p>
-                    </div>
-                    <div class="footer-section" id="linksRapidosSection">
-                        <h3>Links Rápidos</h3>
-                        <ul>
-                            <li><a href="#home">Início</a></li>
-                            <li><a href="#portfolio">Portfólio</a></li>
-                            <li><a href="#sobre">Sobre</a></li>
-                            <li><a href="#servicos">Serviços</a></li>
-                            <li><a href="#contato">Contato</a></li>
-                        </ul>
-                    </div>
-                    <div class="footer-section" id="redesSociaisFooter">
-                        <h3>Redes Sociais</h3>
-                        <div class="social-links" id="socialLinks"></div>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h2>Cabrizo <span>Visual Studio</span></h2>
+                    <p>Transformando momentos em arte através da fotografia.</p>
+                    <div class="footer-social">
+                        <a href="https://instagram.com/angelocabrizo" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://facebook.com/angelocabrizo" target="_blank"><i class="fab fa-facebook"></i></a>
+                        <a href="https://wa.me/863816035" target="_blank"><i class="fab fa-whatsapp"></i></a>
                     </div>
                 </div>
-                <div class="footer-bottom">
-                    <p>&copy; 2026 Cabrizo Visual Studio. Todos os direitos reservados.</p>
-                </div>
-            </div>
-        </footer>
-    </div>
 
-    <!-- ============================================ -->
-    <!-- PAINEL ADMINISTRATIVO COMPLETO -->
-    <!-- ============================================ -->
-    <div id="adminPanel" style="display: none;">
-        <!-- Tela de Login -->
-        <div id="loginScreen" class="admin-login">
-            <div class="login-container">
-                <h2><i class="fas fa-lock"></i> Área Restrita</h2>
-                <form id="loginForm" class="login-form">
-                    <div class="form-group">
-                        <input type="text" id="username" placeholder="Usuário" value="admin" required>
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <div class="form-group">
-                        <input type="password" id="password" placeholder="Senha" value="admin123" required>
-                        <i class="fas fa-key"></i>
-                    </div>
-                    <button type="submit">Entrar</button>
-                    <button type="button" onclick="hideAdminLogin()">Voltar ao Site</button>
-                </form>
-            </div>
-        </div>
-        
-        <!-- Painel Administrativo -->
-        <div id="adminDashboard" style="display: none;">
-            <div class="admin-header">
-                <h1><i class="fas fa-camera"></i> Cabrizo Visual Studio - Admin</h1>
-                <div>
-                    <button onclick="hideAdminLogin()"><i class="fas fa-arrow-left"></i> Ver Site</button>
-                    <button onclick="logout()"><i class="fas fa-sign-out-alt"></i> Sair</button>
+                <div class="footer-links">
+                    <h3>Links Rápidos</h3>
+                    <ul>
+                        <li><a href="#home">Início</a></li>
+                        <li><a href="#portfolio">Portfólio</a></li>
+                        <li><a href="#about">Sobre</a></li>
+                        <li><a href="#services">Serviços</a></li>
+                        <li><a href="#gallery">Galeria</a></li>
+                        <li><a href="#contact">Contato</a></li>
+                    </ul>
                 </div>
-            </div>
+
+                <div class="footer-hours">
+                    <h3>Horário</h3>
+                    <p>Segunda - Sexta: 9h - 18h</p>
+                    <p>Sábado: 9h - 13h</p>
+                    <p>Domingo: Fechado</p>
+                </div>
+
+<div class="footer-newsletter">
+    <h3>Newsletter</h3>
+    <p>Receba nossas novidades</p>
+    <form id="newsletterForm" onsubmit="enviarPorEmail(event)">
+        <input type="email" id="emailVisitante" placeholder="Seu Email" required>
+        <button type="submit"><i class="fas fa-paper-plane"></i></button>
+    </form>
+</div>
+
+<script>
+function enviarPorEmail(event) {
+    event.preventDefault(); // Impede o recarregamento da página
+    
+    // Pega o email que o visitante digitou
+    var emailVisitante = document.getElementById('emailVisitante').value;
+    
+    // SEU EMAIL - COLOQUE AQUI O ENDEREÇO PARA ONDE QUER RECEBER
+    var seuEmail = "acabrizo@gmail.com";  // ← COLOQUE SEU EMAIL AQUI!
+    
+    // Cria o assunto e corpo do email
+    var assunto = "Novo cadastro na newsletter - Cabrizo Visual Studio";
+    var corpo = "Email para cadastro: " + emailVisitante;
+    
+    // Abre o cliente de email padrão
+    window.location.href = "mailto:" + seuEmail + "?subject=" + encodeURIComponent(assunto) + "&body=" + encodeURIComponent(corpo);
+    
+    // Opcional: Mostra mensagem de sucesso
+    alert("Obrigado! Seu cliente de email será aberto para enviar a confirmação.");
+}
+</script>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 Cabrizo Visual Studio. vgL Todos os direitos reservados.
             
-            <div class="admin-nav">
-                <ul>
-                    <li class="active" data-section="dashboard"><i class="fas fa-home"></i> Dashboard</li>
-                    <li data-section="configuracoes"><i class="fas fa-cog"></i> Configurações</li>
-                    <li data-section="portfolio"><i class="fas fa-images"></i> Portfólio</li>
-                    <li data-section="categorias"><i class="fas fa-tags"></i> Categorias</li>
-                    <li data-section="servicos"><i class="fas fa-cog"></i> Serviços</li>
-                    <li data-section="sobre"><i class="fas fa-info-circle"></i> Sobre Nós</li>
-                    <li data-section="contato"><i class="fas fa-address-book"></i> Contato</li>
-                    <li data-section="redes"><i class="fas fa-share-alt"></i> Redes Sociais</li>
-                    <li data-section="hero"><i class="fas fa-sliders-h"></i> Hero Images</li>
-                    <li data-section="rodape"><i class="fas fa-shoe-prints"></i> Rodapé</li>
-                    <li data-section="mensagens"><i class="fas fa-envelope"></i> Mensagens</li>
-                </ul>
-            </div>
-            
-            <div class="admin-content">
-                <!-- ===== DASHBOARD ===== -->
-                <div id="dashboard" class="admin-section active">
-                    <h2>Dashboard</h2>
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <i class="fas fa-images"></i>
-                            <h3 id="totalPortfolio">0</h3>
-                            <p>Fotos no Portfólio</p>
-                        </div>
-                        <div class="stat-card">
-                            <i class="fas fa-cog"></i>
-                            <h3 id="totalServicos">0</h3>
-                            <p>Serviços</p>
-                        </div>
-                        <div class="stat-card">
-                            <i class="fas fa-envelope"></i>
-                            <h3 id="totalMensagens">0</h3>
-                            <p>Mensagens</p>
-                        </div>
-                    </div>
-                    <h3>Últimas Mensagens</h3>
-                    <div id="ultimasMensagens" class="items-list"></div>
-                </div>
-                
-                <!-- ===== CONFIGURAÇÕES GERAIS ===== -->
-                <div id="configuracoes" class="admin-section">
-                    <h2>Configurações do Site</h2>
-                    
-                    <div class="form-group">
-                        <label>Título do Site</label>
-                        <input type="text" id="siteTitulo" class="form-control">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Descrição do Site</label>
-                        <input type="text" id="siteDescricao" class="form-control">
-                    </div>
-                    
-                    <h3>Configurações do Logo</h3>
-                    <div class="form-group">
-                        <label>Tipo de Logo</label>
-                        <select id="logoTipo" class="form-control">
-                            <option value="texto">Texto</option>
-                            <option value="imagem">Imagem</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Texto do Logo (HTML permitido)</label>
-                        <input type="text" id="logoTexto" class="form-control" value="Cabrizo <span>Visual Studio</span>">
-                        <small>Use <span> para destacar parte do texto</small>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>URL da Imagem do Logo</label>
-                        <input type="url" id="logoImagemUrl" class="form-control" placeholder="https://exemplo.com/logo.png">
-                    </div>
-                    
-                    <button class="btn-save" onclick="salvarConfiguracoes()">
-                        <i class="fas fa-save"></i> Salvar Configurações
-                    </button>
-                </div>
-                
-                <!-- ===== PORTFÓLIO ===== -->
-                <div id="portfolio" class="admin-section">
-                    <h2>Gerenciar Portfólio</h2>
-                    <button class="btn-add" onclick="abrirModalNovaFoto()">
-                        <i class="fas fa-plus"></i> Nova Foto
-                    </button>
-                    <div id="portfolioList" class="items-list"></div>
-                </div>
-                
-                <!-- ===== CATEGORIAS ===== -->
-                <div id="categorias" class="admin-section">
-                    <h2>Gerenciar Categorias</h2>
-                    <button class="btn-add" onclick="abrirModalNovaCategoria()">
-                        <i class="fas fa-plus"></i> Nova Categoria
-                    </button>
-                    <div id="categoriasList" class="items-list"></div>
-                </div>
-                
-                <!-- ===== SERVIÇOS ===== -->
-                <div id="servicos" class="admin-section">
-                    <h2>Gerenciar Serviços</h2>
-                    <button class="btn-add" onclick="abrirModalNovoServico()">
-                        <i class="fas fa-plus"></i> Novo Serviço
-                    </button>
-                    <div id="servicosList" class="items-list"></div>
-                </div>
-                
-                <!-- ===== SOBRE NÓS ===== -->
-                <div id="sobre" class="admin-section">
-                    <h2>Editar Sobre Nós</h2>
-                    <div class="form-group">
-                        <label>Título</label>
-                        <input type="text" id="sobreTitulo" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label>Texto</label>
-                        <textarea id="sobreTexto" rows="8" class="form-control"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>URL da Imagem (opcional)</label>
-                        <input type="url" id="sobreImagemUrl" class="form-control" placeholder="https://exemplo.com/imagem.jpg">
-                    </div>
-                    <button class="btn-save" onclick="salvarSobre()">
-                        <i class="fas fa-save"></i> Salvar Alterações
-                    </button>
-                </div>
-                
-                <!-- ===== CONTATO ===== -->
-                <div id="contato" class="admin-section">
-                    <h2>Editar Contato</h2>
-                    
-                    <div class="form-group">
-                        <label>E-mail</label>
-                        <input type="email" id="contatoEmail" class="form-control">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Telefone</label>
-                        <input type="text" id="contatoTelefone" class="form-control">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>WhatsApp (apenas números)</label>
-                        <input type="text" id="contatoWhatsapp" class="form-control">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Endereço</label>
-                        <input type="text" id="contatoEndereco" class="form-control">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Instagram (nome de usuário)</label>
-                        <input type="text" id="contatoInstagram" class="form-control">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Facebook (nome de usuário)</label>
-                        <input type="text" id="contatoFacebook" class="form-control">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Horário de Funcionamento</label>
-                        <input type="text" id="contatoHorario" class="form-control" placeholder="Seg - Sex: 9h às 18h">
-                    </div>
-                    
-                    <button class="btn-save" onclick="salvarContato()">
-                        <i class="fas fa-save"></i> Salvar Contato
-                    </button>
-                </div>
-                
-                <!-- ===== REDES SOCIAIS ===== -->
-                <div id="redes" class="admin-section">
-                    <h2>Redes Sociais</h2>
-                    <button class="btn-add" onclick="abrirModalNovaRedeSocial()">
-                        <i class="fas fa-plus"></i> Nova Rede Social
-                    </button>
-                    <div id="redesList" class="items-list"></div>
-                </div>
-                
-                <!-- ===== HERO IMAGES ===== -->
-                <div id="hero" class="admin-section">
-                    <h2>Hero Images (Slideshow)</h2>
-                    <button class="btn-add" onclick="abrirModalNovaHero()">
-                        <i class="fas fa-plus"></i> Nova Imagem
-                    </button>
-                    <div id="heroList" class="items-list"></div>
-                </div>
-                
-                <!-- ===== RODAPÉ ===== -->
-                <div id="rodape" class="admin-section">
-                    <h2>Configurações do Rodapé</h2>
-                    
-                    <div class="form-group">
-                        <label>Texto do Rodapé</label>
-                        <input type="text" id="rodapeTexto" class="form-control">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>
-                            <input type="checkbox" id="rodapeRedesSociais"> Mostrar Redes Sociais no Rodapé
-                        </label>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>
-                            <input type="checkbox" id="rodapeLinksRapidos"> Mostrar Links Rápidos no Rodapé
-                        </label>
-                    </div>
-                    
-                    <button class="btn-save" onclick="salvarRodape()">
-                        <i class="fas fa-save"></i> Salvar Rodapé
-                    </button>
-                </div>
-                
-                <!-- ===== MENSAGENS ===== -->
-                <div id="mensagens" class="admin-section">
-                    <h2>Mensagens Recebidas</h2>
-                    <div id="mensagensList" class="items-list"></div>
-                </div>
+<p>📸 Siga no Instagram: @Duarte.vgl</p>
+<p>🖥️ Desenvolvido por Duarte Osvaldo (CEO)<p/>
+</p>
             </div>
         </div>
-    </div>
-    
-    <!-- ============================================ -->
-    <!-- MODAIS PARA CADASTRO -->
-    <!-- ============================================ -->
-    
-    <!-- Modal PORTFÓLIO -->
-    <div id="portfolioModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Nova Foto</h3>
-                <span class="modal-close" onclick="closeModal('portfolioModal')">&times;</span>
-            </div>
-            <form id="portfolioForm" onsubmit="event.preventDefault(); salvarFotoPorUrl()">
-                <input type="hidden" id="portfolioId">
-                
-                <div class="form-group">
-                    <label>Título da Foto</label>
-                    <input type="text" id="portfolioTitulo" placeholder="Ex: Casamento na Praia" required>
-                </div>
-                
-                <div class="form-group">
-                    <label>Categoria</label>
-                    <select id="portfolioCategoria" class="categoria-select" required>
-                        <option value="Casamento">Casamento</option>
-                        <option value="Moda">Moda</option>
-                        <option value="Corporativo">Corporativo</option>
-                        <option value="Ensaio">Ensaio</option>
-                        <option value="Eventos">Eventos</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label>URL da Imagem (HTTPS)</label>
-                    <input type="url" id="portfolioImagemUrl" placeholder="https://exemplo.com/minha-foto.jpg" required>
-                    <small>Cole o link direto da imagem (Unsplash, Imgur, etc.)</small>
-                </div>
-                
-                <div id="portfolioPreview" class="image-preview" style="display: none; margin: 15px 0; text-align: center;"></div>
-                
-                <div class="form-group">
-                    <label>Descrição (opcional)</label>
-                    <textarea id="portfolioDescricao" rows="3" placeholder="Descreva a foto..."></textarea>
-                </div>
-                
-                <div style="display: flex; gap: 10px; margin-top: 20px;">
-                    <button type="submit" class="btn-save" style="flex: 1;">
-                        <i class="fas fa-save"></i> Salvar Foto
-                    </button>
-                    <button type="button" class="btn-voltar" onclick="closeModal('portfolioModal')" style="flex: 0.3;">
-                        Cancelar
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-    
-    <!-- Modal CATEGORIA -->
-    <div id="categoriaModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Nova Categoria</h3>
-                <span class="modal-close" onclick="closeModal('categoriaModal')">&times;</span>
-            </div>
-            <form onsubmit="event.preventDefault(); salvarNovaCategoria()">
-                <div class="form-group">
-                    <label>Nome da Categoria</label>
-                    <input type="text" id="novaCategoria" placeholder="Ex: Casamento" required>
-                </div>
-                
-                <div style="display: flex; gap: 10px; margin-top: 20px;">
-                    <button type="submit" class="btn-save" style="flex: 1;">
-                        <i class="fas fa-save"></i> Salvar Categoria
-                    </button>
-                    <button type="button" class="btn-voltar" onclick="closeModal('categoriaModal')" style="flex: 0.3;">
-                        Cancelar
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-    
-    <!-- Modal SERVIÇOS -->
-    <div id="servicoModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Novo Serviço</h3>
-                <span class="modal-close" onclick="closeModal('servicoModal')">&times;</span>
-            </div>
-            <form id="servicoForm" onsubmit="event.preventDefault(); salvarNovoServico()">
-                <input type="hidden" id="servicoId">
-                
-                <div class="form-group">
-                    <label>Título do Serviço</label>
-                    <input type="text" id="servicoTitulo" placeholder="Ex: Ensaios Externos" required>
-                </div>
-                
-                <div class="form-group">
-                    <label>Descrição</label>
-                    <textarea id="servicoDescricao" rows="4" placeholder="Descreva o serviço..." required></textarea>
-                </div>
-                
-                <div class="form-group">
-                    <label>Preço (opcional)</label>
-                    <input type="text" id="servicoPreco" placeholder="Ex: A partir de R$ 500">
-                </div>
-                
-                <div class="form-group">
-                    <label>Ícone (Font Awesome)</label>
-                    <select id="servicoIcone" required>
-                        <option value="fa-camera">Câmera</option>
-                        <option value="fa-lightbulb">Lâmpada</option>
-                        <option value="fa-calendar">Calendário</option>
-                        <option value="fa-heart">Coração</option>
-                        <option value="fa-users">Equipe</option>
-                        <option value="fa-star">Estrela</option>
-                        <option value="fa-video">Vídeo</option>
-                        <option value="fa-magic">Mágica</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label>
-                        <input type="checkbox" id="servicoDestaque"> Serviço em Destaque
-                    </label>
-                </div>
-                
-                <div style="display: flex; gap: 10px; margin-top: 20px;">
-                    <button type="submit" class="btn-save" style="flex: 1;">
-                        <i class="fas fa-save"></i> Salvar Serviço
-                    </button>
-                    <button type="button" class="btn-voltar" onclick="closeModal('servicoModal')" style="flex: 0.3;">
-                        Cancelar
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-    
-    <!-- Modal REDES SOCIAIS -->
-    <div id="redeSocialModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Nova Rede Social</h3>
-                <span class="modal-close" onclick="closeModal('redeSocialModal')">&times;</span>
-            </div>
-            <form id="redeSocialForm" onsubmit="event.preventDefault(); salvarNovaRedeSocial()">
-                <input type="hidden" id="redeSocialIndex">
-                
-                <div class="form-group">
-                    <label>Nome da Rede</label>
-                    <input type="text" id="redeSocialNome" placeholder="Ex: Instagram" required>
-                </div>
-                
-                <div class="form-group">
-                    <label>URL Completa</label>
-                    <input type="url" id="redeSocialUrl" placeholder="https://instagram.com/angelocabrizo">
-                </div>
-                
-                <div class="form-group">
-                    <label>Ícone</label>
-                    <select id="redeSocialIcone" required>
-                        <option value="fa-instagram">Instagram</option>
-                        <option value="fa-facebook">Facebook</option>
-                        <option value="fa-youtube">YouTube</option>
-                        <option value="fa-tiktok">TikTok</option>
-                        <option value="fa-pinterest">Pinterest</option>
-                        <option value="fa-linkedin">LinkedIn</option>
-                        <option value="fa-twitter">Twitter</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label>
-                        <input type="checkbox" id="redeSocialAtivo" checked> Ativo (mostrar no site)
-                    </label>
-                </div>
-                
-                <div style="display: flex; gap: 10px; margin-top: 20px;">
-                    <button type="submit" class="btn-save" style="flex: 1;">
-                        <i class="fas fa-save"></i> Salvar Rede Social
-                    </button>
-                    <button type="button" class="btn-voltar" onclick="closeModal('redeSocialModal')" style="flex: 0.3;">
-                        Cancelar
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-    
-    <!-- Modal HERO IMAGES -->
-    <div id="heroModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Nova Imagem Hero</h3>
-                <span class="modal-close" onclick="closeModal('heroModal')">&times;</span>
-            </div>
-            <form onsubmit="event.preventDefault(); salvarNovaHeroImage()">
-                <div class="form-group">
-                    <label>URL da Imagem (HTTPS)</label>
-                    <input type="url" id="heroImagemUrl" placeholder="https://exemplo.com/imagem.jpg" required>
-                    <small>Use imagens de alta resolução (1920x1080 recomendado)</small>
-                </div>
-                
-                <div id="heroPreview" class="image-preview" style="display: none; margin: 15px 0; text-align: center;"></div>
-                
-                <div style="display: flex; gap: 10px; margin-top: 20px;">
-                    <button type="submit" class="btn-save" style="flex: 1;">
-                        <i class="fas fa-save"></i> Adicionar Imagem
-                    </button>
-                    <button type="button" class="btn-voltar" onclick="closeModal('heroModal')" style="flex: 0.3;">
-                        Cancelar
-                    </button>
-                </div>
-            </form>
-        </div>
+    </footer>
+
+    <!-- Back to Top -->
+    <div class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
     </div>
 
     <script src="script.js"></script>
